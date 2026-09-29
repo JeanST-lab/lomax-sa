@@ -1,0 +1,238 @@
+﻿**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20260929193642
+Nombre de usuario: JEANST23IC\jean2
+Usuario RunAs: JEANST23IC\jean2
+Nombre de la configuración: 
+Máquina: JEANST23IC (Microsoft Windows NT 10.0.26200.0)
+Aplicación host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Id. de proceso: 32668
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+La transcripción ha comenzado. El archivo de salida es evidencia\inventario.txt
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "=== Archivos del proyecto (sin evidencia, .git ni cache) ==="
+=== Archivos del proyecto (sin evidencia, .git ni cache) ===
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Get-ChildItem -Recurse -File | Where-Object { $_.FullName -notmatch '\\(\.git|evidencia|evidencias|node_modules|__pycache__)\\' } | ForEach-Object { $_.FullName.Substring($PWD.Path.Length + 1) }
+.gitignore
+docker-compose.yml
+env.example
+kubeconfig-lomax.yaml
+backend\.dockerignore
+backend\Dockerfile
+backend\requirements.txt
+backend\app\aws.py
+backend\app\config.py
+backend\app\db.py
+backend\app\errores.py
+backend\app\main.py
+backend\app\servicio.py
+backend\app\__init__.py
+data\producto_e7.jpg
+db\productos.json
+db\pruebas.sql
+db\schema.sql
+db\seed.sql
+docs\api-errores.md
+frontend\app.js
+frontend\Dockerfile
+frontend\index.html
+frontend\styles.css
+k8s\backend.yaml
+k8s\config.yaml
+k8s\eks-trust.json
+k8s\frontend.yaml
+k8s\proxy.yaml
+lambda\function.zip
+lambda\lambda_function.py
+lambda\package\lambda_function.py
+lambda\package\PIL\AvifImagePlugin.py
+lambda\package\PIL\BdfFontFile.py
+lambda\package\PIL\BlpImagePlugin.py
+lambda\package\PIL\BmpImagePlugin.py
+lambda\package\PIL\BufrStubImagePlugin.py
+lambda\package\PIL\ContainerIO.py
+lambda\package\PIL\CurImagePlugin.py
+lambda\package\PIL\DcxImagePlugin.py
+lambda\package\PIL\DdsImagePlugin.py
+lambda\package\PIL\EpsImagePlugin.py
+lambda\package\PIL\ExifTags.py
+lambda\package\PIL\features.py
+lambda\package\PIL\FitsImagePlugin.py
+lambda\package\PIL\FliImagePlugin.py
+lambda\package\PIL\FontFile.py
+lambda\package\PIL\FpxImagePlugin.py
+lambda\package\PIL\FtexImagePlugin.py
+lambda\package\PIL\GbrImagePlugin.py
+lambda\package\PIL\GdImageFile.py
+lambda\package\PIL\GifImagePlugin.py
+lambda\package\PIL\GimpGradientFile.py
+lambda\package\PIL\GimpPaletteFile.py
+lambda\package\PIL\GribStubImagePlugin.py
+lambda\package\PIL\Hdf5StubImagePlugin.py
+lambda\package\PIL\IcnsImagePlugin.py
+lambda\package\PIL\IcoImagePlugin.py
+lambda\package\PIL\Image.py
+lambda\package\PIL\ImageChops.py
+lambda\package\PIL\ImageCms.py
+lambda\package\PIL\ImageColor.py
+lambda\package\PIL\ImageDraw.py
+lambda\package\PIL\ImageDraw2.py
+lambda\package\PIL\ImageEnhance.py
+lambda\package\PIL\ImageFile.py
+lambda\package\PIL\ImageFilter.py
+lambda\package\PIL\ImageFont.py
+lambda\package\PIL\ImageGrab.py
+lambda\package\PIL\ImageMath.py
+lambda\package\PIL\ImageMode.py
+lambda\package\PIL\ImageMorph.py
+lambda\package\PIL\ImageOps.py
+lambda\package\PIL\ImagePalette.py
+lambda\package\PIL\ImagePath.py
+lambda\package\PIL\ImageQt.py
+lambda\package\PIL\ImageSequence.py
+lambda\package\PIL\ImageShow.py
+lambda\package\PIL\ImageStat.py
+lambda\package\PIL\ImageText.py
+lambda\package\PIL\ImageTk.py
+lambda\package\PIL\ImageTransform.py
+lambda\package\PIL\ImageWin.py
+lambda\package\PIL\ImImagePlugin.py
+lambda\package\PIL\ImtImagePlugin.py
+lambda\package\PIL\IptcImagePlugin.py
+lambda\package\PIL\Jpeg2KImagePlugin.py
+lambda\package\PIL\JpegImagePlugin.py
+lambda\package\PIL\JpegPresets.py
+lambda\package\PIL\McIdasImagePlugin.py
+lambda\package\PIL\MicImagePlugin.py
+lambda\package\PIL\MpegImagePlugin.py
+lambda\package\PIL\MpoImagePlugin.py
+lambda\package\PIL\MspImagePlugin.py
+lambda\package\PIL\PaletteFile.py
+lambda\package\PIL\PalmImagePlugin.py
+lambda\package\PIL\PcdImagePlugin.py
+lambda\package\PIL\PcfFontFile.py
+lambda\package\PIL\PcxImagePlugin.py
+lambda\package\PIL\PdfImagePlugin.py
+lambda\package\PIL\PdfParser.py
+lambda\package\PIL\PixarImagePlugin.py
+lambda\package\PIL\PngImagePlugin.py
+lambda\package\PIL\PpmImagePlugin.py
+lambda\package\PIL\PsdImagePlugin.py
+lambda\package\PIL\PSDraw.py
+lambda\package\PIL\py.typed
+lambda\package\PIL\QoiImagePlugin.py
+lambda\package\PIL\report.py
+lambda\package\PIL\SgiImagePlugin.py
+lambda\package\PIL\SpiderImagePlugin.py
+lambda\package\PIL\SunImagePlugin.py
+lambda\package\PIL\TarIO.py
+lambda\package\PIL\TgaImagePlugin.py
+lambda\package\PIL\TiffImagePlugin.py
+lambda\package\PIL\TiffTags.py
+lambda\package\PIL\WalImageFile.py
+lambda\package\PIL\WebPImagePlugin.py
+lambda\package\PIL\WmfImagePlugin.py
+lambda\package\PIL\XbmImagePlugin.py
+lambda\package\PIL\XpmImagePlugin.py
+lambda\package\PIL\XVThumbImagePlugin.py
+lambda\package\PIL\_avif.cpython-312-x86_64-linux-gnu.so
+lambda\package\PIL\_avif.pyi
+lambda\package\PIL\_binary.py
+lambda\package\PIL\_deprecate.py
+lambda\package\PIL\_imaging.cpython-312-x86_64-linux-gnu.so
+lambda\package\PIL\_imaging.pyi
+lambda\package\PIL\_imagingcms.cpython-312-x86_64-linux-gnu.so
+lambda\package\PIL\_imagingcms.pyi
+lambda\package\PIL\_imagingft.cpython-312-x86_64-linux-gnu.so
+lambda\package\PIL\_imagingft.pyi
+lambda\package\PIL\_imagingmath.cpython-312-x86_64-linux-gnu.so
+lambda\package\PIL\_imagingmath.pyi
+lambda\package\PIL\_imagingmorph.cpython-312-x86_64-linux-gnu.so
+lambda\package\PIL\_imagingmorph.pyi
+lambda\package\PIL\_imagingtk.cpython-312-x86_64-linux-gnu.so
+lambda\package\PIL\_imagingtk.pyi
+lambda\package\PIL\_tkinter_finder.py
+lambda\package\PIL\_typing.py
+lambda\package\PIL\_util.py
+lambda\package\PIL\_version.py
+lambda\package\PIL\_webp.cpython-312-x86_64-linux-gnu.so
+lambda\package\PIL\_webp.pyi
+lambda\package\PIL\__init__.py
+lambda\package\PIL\__main__.py
+lambda\package\pillow-12.2.0.dist-info\INSTALLER
+lambda\package\pillow-12.2.0.dist-info\METADATA
+lambda\package\pillow-12.2.0.dist-info\RECORD
+lambda\package\pillow-12.2.0.dist-info\REQUESTED
+lambda\package\pillow-12.2.0.dist-info\top_level.txt
+lambda\package\pillow-12.2.0.dist-info\WHEEL
+lambda\package\pillow-12.2.0.dist-info\zip-safe
+lambda\package\pillow-12.2.0.dist-info\licenses\LICENSE
+lambda\package\pillow-12.2.0.dist-info\sboms\auditwheel.cdx.json
+lambda\package\pillow.libs\libavif-0b1c2ae7.so.16.4.1
+lambda\package\pillow.libs\libbrotlicommon-c43ca8d5.so.1.2.0
+lambda\package\pillow.libs\libbrotlidec-2b4e35de.so.1.2.0
+lambda\package\pillow.libs\libfreetype-bbbc9ca1.so.6.20.6
+lambda\package\pillow.libs\libharfbuzz-0c77c97f.so.0.61321.0
+lambda\package\pillow.libs\libjpeg-02b4d8cf.so.62.4.0
+lambda\package\pillow.libs\liblcms2-35454777.so.2.0.18
+lambda\package\pillow.libs\liblzma-d41bb66c.so.5.8.3
+lambda\package\pillow.libs\libopenjp2-a0b2093f.so.2.5.4
+lambda\package\pillow.libs\libpng16-1ff02007.so.16.56.0
+lambda\package\pillow.libs\libsharpyuv-f85d91c0.so.0.1.2
+lambda\package\pillow.libs\libtiff-56c1bbc6.so.6.2.0
+lambda\package\pillow.libs\libwebp-15463320.so.7.2.0
+lambda\package\pillow.libs\libwebpdemux-65067297.so.2.0.17
+lambda\package\pillow.libs\libwebpmux-83c74882.so.3.1.2
+lambda\package\pillow.libs\libXau-00ec42fe.so.6.0.0
+lambda\package\pillow.libs\libxcb-46a603a8.so.1.1.0
+lambda\package\pillow.libs\libzstd-96175704.so.1.5.7
+proxy\Dockerfile
+proxy\nginx.conf
+scripts\cargar-datos.ps1
+scripts\e7_registro.ps1
+scripts\eks-hosts.ps1
+scripts\levantar-api.ps1
+scripts\limpiar-pruebas.ps1
+scripts\probar-api.ps1
+scripts\publicar-iniciales.ps1
+scripts\verificar-e5.ps1
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "=== Evidencia por carpeta ==="
+=== Evidencia por carpeta ===
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Get-ChildItem evidencia, evidencias -Directory -ErrorAction SilentlyContinue | ForEach-Object { "{0} : {1} archivos" -f $_.FullName.Substring($PWD.Path.Length + 1), (Get-ChildItem $_.FullName -Recurse -File).Count }
+evidencia\e3 : 14 archivos
+evidencia\e4 : 11 archivos
+evidencia\e5 : 26 archivos
+evidencia\e6 : 2 archivos
+evidencia\e7 : 19 archivos
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "=== Docs ==="
+=== Docs ===
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Get-ChildItem docs -Recurse -File -ErrorAction SilentlyContinue | ForEach-Object { $_.FullName.Substring($PWD.Path.Length + 1) }
+docs\api-errores.md
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "=== Busqueda de secretos en lo versionado ==="
+=== Busqueda de secretos en lo versionado ===
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> git ls-files | Select-String -Pattern "kubeconfig|\.env$" 
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> git grep -n -i -E "password|passwd|secret_key|AKIA" -- . ":!evidencia" ":!evidencias" | Select-Object -First 25
+backend/app/config.py:10:DB_PASSWORD = os.environ.get("DB_PASSWORD", "postgres")
+backend/app/config.py:15:    f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+backend/app/db.py:17:            user=config.DB_USER, password=config.DB_PASSWORD, connect_timeout=5,
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> git status --short | Select-Object -First 25
+ M .gitignore
+?? data/
+?? evidencia/e6/
+?? evidencia/e7/
+?? evidencia/inventario.txt
+?? k8s/
+?? scripts/e7_registro.ps1
+?? scripts/eks-hosts.ps1
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Stop-Transcript
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20260929193643
+**********************

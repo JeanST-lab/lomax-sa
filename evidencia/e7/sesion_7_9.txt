@@ -1,0 +1,81 @@
+﻿**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20260929193420
+Nombre de usuario: JEANST23IC\jean2
+Usuario RunAs: JEANST23IC\jean2
+Nombre de la configuración: 
+Máquina: JEANST23IC (Microsoft Windows NT 10.0.26200.0)
+Aplicación host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Id. de proceso: 41192
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+La transcripción ha comenzado. El archivo de salida es evidencia\e7\sesion_7_9.txt
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> # Entrada al proxy de EKS
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> if ((curl.exe -s -o NUL -w "%{http_code}" http://localhost:8090/) -ne "200") { Start-Process kubectl -ArgumentList "port-forward -n lomax svc/proxy 8090:80" -WindowStyle Hidden; Start-Sleep -Seconds 5 }
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "=== ANTES: productos EKS-E7 y hash de su miniatura ==="
+=== ANTES: productos EKS-E7 y hash de su miniatura ===
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $prods = @(Invoke-RestMethod "$API/productos" | Where-Object codigo -like "EKS-E7-*")
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $antes = @{}
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> foreach ($p in $prods) { curl.exe -s -o "$env:TEMP\ant.jpg" "$API/productos/$($p.producto_id)/imagen"; $antes[$p.producto_id] = (Get-FileHash "$env:TEMP\ant.jpg").Hash; "{0} {1} {2} hash={3}" -f $p.codigo, $p.producto_id, $p.estado, $antes[$p.producto_id] }
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "Productos en el catalogo: " + @(Invoke-RestMethod "$API/productos").Count
+Productos en el catalogo: 1
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "=== ANTES: Pods y UID ==="
+=== ANTES: Pods y UID ===
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl get pods -n lomax -o custom-columns="POD:.metadata.name,UID:.metadata.uid,CREADO:.metadata.creationTimestamp"
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $uidsAntes = (kubectl get pods -n lomax -o jsonpath="{.items[*].metadata.uid}") -split " "
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "=== RECREAR TODOS LOS PODS ==="
+=== RECREAR TODOS LOS PODS ===
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Get-Process kubectl -ErrorAction SilentlyContinue | Stop-Process -Force
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl delete pods --all -n lomax
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl rollout status deployment/backend -n lomax --timeout=120s
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl rollout status deployment/frontend -n lomax --timeout=120s
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl rollout status deployment/proxy -n lomax --timeout=120s
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "=== DESPUES: Pods y UID ==="
+=== DESPUES: Pods y UID ===
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl get pods -n lomax -o wide
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl get pods -n lomax -o custom-columns="POD:.metadata.name,UID:.metadata.uid,CREADO:.metadata.creationTimestamp"
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $uidsDespues = (kubectl get pods -n lomax -o jsonpath="{.items[*].metadata.uid}") -split " "
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $comunes = @($uidsDespues | Where-Object { $uidsAntes -contains $_ })
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> if ($comunes.Count -eq 0) { "OK: los $($uidsAntes.Count) Pods originales fueron reemplazados por $($uidsDespues.Count) Pods nuevos (ningun UID se repite)" } else { "FALLO: $($comunes.Count) UID se repiten" }
+OK: los 5 Pods originales fueron reemplazados por 5 Pods nuevos (ningun UID se repite)
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl get deployment -n lomax
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> # El port-forward apuntaba a un Pod eliminado: se reabre
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $pf = Start-Process kubectl -ArgumentList "port-forward -n lomax svc/proxy 8090:80" -PassThru -WindowStyle Hidden
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Start-Sleep -Seconds 6
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "=== DESPUES: mismos productos y miniaturas ==="
+=== DESPUES: mismos productos y miniaturas ===
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> foreach ($p in $prods) {
+    $id = $p.producto_id
+    $d = Invoke-RestMethod "$API/productos/$id"
+    curl.exe -s -o "$env:TEMP\des.jpg" "$API/productos/$id/imagen"
+    $h = (Get-FileHash "$env:TEMP\des.jpg").Hash
+    $ok = if ($h -eq $antes[$id]) { "IGUAL" } else { "DISTINTO" }
+    "{0} {1} estado={2} imagen={3} hash={4} -> {5} que antes" -f $d.codigo, $id, $d.estado, $d.estado_imagen, $h, $ok
+    docker exec lomax-rds-local psql -U postgres -d lomax_db -t -A -c "SELECT producto_id, codigo, estado FROM productos WHERE producto_id='$id';"
+    $kf = "$env:TEMP\e7key.json"; @{ producto_id = @{ S = $id } } | ConvertTo-Json -Compress | Set-Content $kf -Encoding ascii
+    aws dynamodb get-item --table-name lomax-productos-attr --key "file://$kf" --query "Item.{id:producto_id.S,estado:estado_procesamiento.S,miniatura:miniatura_key.S}"
+}
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "Productos en el catalogo: " + @(Invoke-RestMethod "$API/productos").Count
+Productos en el catalogo: 1
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> curl.exe -s -o NUL -w "Frontend HTTP %{http_code}`n" http://localhost:8090/
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Stop-Transcript
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20260929193439
+**********************

@@ -1,0 +1,72 @@
+﻿**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20260929191654
+Nombre de usuario: JEANST23IC\jean2
+Usuario RunAs: JEANST23IC\jean2
+Nombre de la configuración: 
+Máquina: JEANST23IC (Microsoft Windows NT 10.0.26200.0)
+Aplicación host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Id. de proceso: 42948
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+La transcripción ha comenzado. El archivo de salida es evidencia\e7\sesion_7_1.txt
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl version --client
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> docker network connect floci-net lomax-rds-local
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> docker network inspect floci-net --format "{{range .Containers}}{{.Name}} {{end}}"
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> docker inspect lomax-rds-local --format "{{range .Config.Env}}{{println .}}{{end}}" | Select-String "POSTGRES_USER|POSTGRES_DB"
+
+POSTGRES_USER=postgres
+POSTGRES_DB=lomax_db
+
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> aws iam create-role --role-name eks-role --assume-role-policy-document file://k8s/eks-trust.json
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> aws eks create-cluster --name lomax-eks `
+  --role-arn arn:aws:iam::000000000000:role/eks-role `
+  --resources-vpc-config subnetIds=subnet-00000000,securityGroupIds=sg-00000000
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Start-Sleep -Seconds 30
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> aws eks describe-cluster --name lomax-eks --query "cluster.{Nombre:name,Estado:status,Version:version}"
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> docker ps --filter "name=floci-eks" --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> aws ec2 describe-subnets --query "Subnets[].{Id:SubnetId,Vpc:VpcId,AZ:AvailabilityZone}" --output table
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> aws ec2 describe-security-groups --query "SecurityGroups[].{Id:GroupId,Nombre:GroupName,Vpc:VpcId}" --output table
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> aws eks create-cluster --name lomax-eks `
+  --role-arn arn:aws:iam::000000000000:role/eks-role `
+  --resources-vpc-config "subnetIds=subnet-default-us-east-1-a,subnet-default-us-east-1-b,securityGroupIds=sg-default-us-east-1"
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Start-Sleep -Seconds 30
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> aws eks describe-cluster --name lomax-eks --query "cluster.{Nombre:name,Estado:status,Version:version}"
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> docker ps --filter "name=floci-eks" --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $K3S = "floci-eks-lomax-eks"
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $port = (docker port $K3S 6443 | Select-Object -First 1).Split(":")[-1]
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> docker exec $K3S cat /etc/rancher/k3s/k3s.yaml | Out-File kubeconfig-lomax.yaml -Encoding ascii
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> (Get-Content kubeconfig-lomax.yaml) -replace "https://127.0.0.1:6443","https://127.0.0.1:$port" | Set-Content kubeconfig-lomax.yaml -Encoding ascii
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $env:KUBECONFIG = "$PWD\kubeconfig-lomax.yaml"
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> docker network connect floci-net $K3S
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl get nodes -o wide
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl get pods -A
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Add-Content .gitignore "`nkubeconfig-lomax.yaml"
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Stop-Transcript
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20260929192009
+**********************

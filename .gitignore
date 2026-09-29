@@ -3,3 +3,5 @@ lambda/function.zip
 __pycache__/
 *.pyc
 .env
+
+kubeconfig-lomax.yaml

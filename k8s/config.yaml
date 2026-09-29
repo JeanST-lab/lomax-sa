@@ -1,0 +1,22 @@
+# Namespace y configuracion compartida. Los valores apuntan a los contenedores de FLOCI y RDS
+# por su nombre en la red Docker "floci-net". La contrasena de la base NO va aqui: vive en el
+# Secret "lomax-db" (se crea con kubectl, ver docs/eks.md).
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lomax
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lomax-config
+  namespace: lomax
+data:
+  DB_HOST: "lomax-rds-local"
+  DB_PORT: "5432"
+  DB_NAME: "lomax_db"
+  DB_USER: "postgres"
+  AWS_ENDPOINT_URL: "http://floci:4566"
+  AWS_DEFAULT_REGION: "us-east-1"
+  AWS_ACCESS_KEY_ID: "test"
+  AWS_SECRET_ACCESS_KEY: "test"

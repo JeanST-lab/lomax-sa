@@ -1,0 +1,131 @@
+﻿**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20260929192917
+Nombre de usuario: JEANST23IC\jean2
+Usuario RunAs: JEANST23IC\jean2
+Nombre de la configuración: 
+Máquina: JEANST23IC (Microsoft Windows NT 10.0.26200.0)
+Aplicación host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Id. de proceso: 19868
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+La transcripción ha comenzado. El archivo de salida es evidencia\e7\sesion_7_7b.txt
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $o = curl.exe -s http://localhost:8090/api/openapi.json | ConvertFrom-Json
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "=== ProductoIn (campos del registro) ==="
+=== ProductoIn (campos del registro) ===
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $o.components.schemas.ProductoIn | ConvertTo-Json -Depth 10
+{
+    "properties":  {
+                       "codigo":  {
+                                      "type":  "string",
+                                      "maxLength":  50,
+                                      "minLength":  1,
+                                      "title":  "Codigo"
+                                  },
+                       "nombre":  {
+                                      "type":  "string",
+                                      "maxLength":  150,
+                                      "minLength":  1,
+                                      "title":  "Nombre"
+                                  },
+                       "descripcion":  {
+                                           "type":  "string",
+                                           "title":  "Descripcion"
+                                       },
+                       "precio":  {
+                                      "anyOf":  [
+                                                    {
+                                                        "type":  "number",
+                                                        "minimum":  0.0
+                                                    },
+                                                    {
+                                                        "type":  "string",
+                                                        "pattern":  "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,8}|(?=[\\d.]{1,11}0*$)\\d{0,8}\\.\\d{0,2}0*$)"
+                                                    }
+                                                ],
+                                      "title":  "Precio"
+                                  },
+                       "categoria_id":  {
+                                            "type":  "integer",
+                                            "maximum":  2147483647.0,
+                                            "minimum":  1.0,
+                                            "title":  "Categoria Id"
+                                        },
+                       "atributos":  {
+                                         "additionalProperties":  true,
+                                         "type":  "object",
+                                         "title":  "Atributos"
+                                     }
+                   },
+    "type":  "object",
+    "required":  [
+                     "codigo",
+                     "nombre",
+                     "descripcion",
+                     "precio",
+                     "categoria_id",
+                     "atributos"
+                 ],
+    "title":  "ProductoIn"
+}
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "=== POST /productos/{pid}/imagen ==="
+=== POST /productos/{pid}/imagen ===
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $o.paths.'/productos/{pid}/imagen'.post.requestBody | ConvertTo-Json -Depth 12
+{
+    "required":  true,
+    "content":  {
+                    "multipart/form-data":  {
+                                                "schema":  {
+                                                               "$ref":  "#/components/schemas/Body_subir_imagen_productos__pid__imagen_post"
+                                                           }
+                                            }
+                }
+}
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "=== Un producto existente (respuesta del detalle) ==="
+=== Un producto existente (respuesta del detalle) ===
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> curl.exe -s http://localhost:8090/api/productos/33ab0a28-1643-4854-b474-139f026d69a8 | ConvertFrom-Json | ConvertTo-Json -Depth 8
+{
+    "producto_id":  "33ab0a28-1643-4854-b474-139f026d69a8",
+    "codigo":  "TEST-E5-001",
+    "nombre":  "Monitor de prueba E5",
+    "descripcion":  "Producto registrado para la verificaci├│n E5",
+    "precio":  199.9,
+    "categoria_id":  2,
+    "fecha":  "2026-09-29T22:42:11.238829",
+    "estado":  "PUBLICADO",
+    "atributos":  {
+                      "color":  "negro",
+                      "tamano":  "pulgadas"
+                  },
+    "estado_imagen":  "PROCESADO",
+    "miniatura":  {
+                      "bucket":  "lomax-imagenes-miniaturas",
+                      "key":  "miniaturas/33ab0a28-1643-4854-b474-139f026d69a8/original_300.jpg",
+                      "url":  "s3://lomax-imagenes-miniaturas/miniaturas/33ab0a28-1643-4854-b474-139f026d69a8/original_300.jpg"
+                  },
+    "imagen_url":  "/productos/33ab0a28-1643-4854-b474-139f026d69a8/imagen"
+}
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "=== RDS: estructura de productos ==="
+=== RDS: estructura de productos ===
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> docker exec lomax-rds-local psql -U postgres -d lomax_db -c "\d productos"
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "=== Recursos en Floci ==="
+=== Recursos en Floci ===
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> aws dynamodb list-tables
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> aws s3 ls
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> aws lambda list-functions --query "Functions[].FunctionName"
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Stop-Transcript
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20260929192921
+**********************

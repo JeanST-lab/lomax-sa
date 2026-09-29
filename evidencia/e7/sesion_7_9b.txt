@@ -1,0 +1,69 @@
+﻿**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20260929193552
+Nombre de usuario: JEANST23IC\jean2
+Usuario RunAs: JEANST23IC\jean2
+Nombre de la configuración: 
+Máquina: JEANST23IC (Microsoft Windows NT 10.0.26200.0)
+Aplicación host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Id. de proceso: 41192
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+La transcripción ha comenzado. El archivo de salida es evidencia\e7\sesion_7_9b.txt
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> if ((curl.exe -s -o NUL -w "%{http_code}" http://localhost:8090/) -ne "200") { Start-Process kubectl -ArgumentList "port-forward -n lomax svc/proxy 8090:80" -WindowStyle Hidden; Start-Sleep -Seconds 6 }
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "=== Pods actuales (recreados en 7.9) ==="
+=== Pods actuales (recreados en 7.9) ===
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl get pods -n lomax -o wide
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl get deployment -n lomax
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $all = Invoke-RestMethod "$API/productos"
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "Productos en el catalogo: " + $all.Count
+Productos en el catalogo: 23
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $prods = @($all | Where-Object { $_.codigo -like "EKS-E7-*" })
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "Productos EKS-E7 encontrados: " + $prods.Count
+Productos EKS-E7 encontrados: 1
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $ref = (Get-FileHash evidencia\e7\miniatura_s3_directa.jpg).Hash
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "Hash de referencia (S3, antes de recrear los Pods, bloque 7.8b): $ref"
+Hash de referencia (S3, antes de recrear los Pods, bloque 7.8b): 63618B856FFDF03150BFDC0C03B392914C868A7CE8FAF44EF9180069438616B6
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> foreach ($p in $prods) {
+    $id = $p.producto_id
+    $d = Invoke-RestMethod "$API/productos/$id"
+    curl.exe -s -o "$env:TEMP\api.jpg" "$API/productos/$id/imagen"
+    aws s3 cp "s3://lomax-imagenes-miniaturas/$($d.miniatura.key)" "$env:TEMP\s3.jpg" --only-show-errors
+    $hApi = (Get-FileHash "$env:TEMP\api.jpg").Hash
+    $hS3 = (Get-FileHash "$env:TEMP\s3.jpg").Hash
+    "--- $($d.codigo)  $id  estado=$($d.estado)  imagen=$($d.estado_imagen)"
+    "    hash API=$hApi"
+    "    hash S3 =$hS3  -> $(if ($hApi -eq $hS3) {'IGUAL API vs S3'} else {'DISTINTO API vs S3'})"
+    if ($d.codigo -eq "EKS-E7-001") { "    contra la referencia previa: $(if ($hApi -eq $ref) {'IGUAL que antes de recrear los Pods'} else {'DISTINTO que antes'})" }
+    "    RDS:"
+    docker exec lomax-rds-local psql -U postgres -d lomax_db -t -A -c "SELECT producto_id, codigo, estado FROM productos WHERE producto_id='$id';"
+    $kf = "$env:TEMP\e7key.json"; @{ producto_id = @{ S = $id } } | ConvertTo-Json -Compress | Set-Content $kf -Encoding ascii
+    "    DynamoDB:"
+    aws dynamodb get-item --table-name lomax-productos-attr --key "file://$kf" --query "Item.{id:producto_id.S,estado:estado_procesamiento.S,miniatura:miniatura_key.S}"
+}
+
+
+--- EKS-E7-001  b3aaa866-2536-4aa9-810e-e96cbdfae590  estado=PUBLICADO  imagen=PROCESADO
+    hash API=63618B856FFDF03150BFDC0C03B392914C868A7CE8FAF44EF9180069438616B6
+    hash S3 =63618B856FFDF03150BFDC0C03B392914C868A7CE8FAF44EF9180069438616B6  -> IGUAL API vs S3
+    contra la referencia previa: IGUAL que antes de recrear los Pods
+    RDS:
+
+    DynamoDB:
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> curl.exe -s -o NUL -w "Frontend HTTP %{http_code}`n" http://localhost:8090/
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Stop-Transcript
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20260929193556
+**********************

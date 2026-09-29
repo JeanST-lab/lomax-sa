@@ -1,0 +1,48 @@
+# Reverse proxy: "/" -> frontend, "/api" -> backend (nginx.conf resuelve los Services
+# "frontend" y "backend" del mismo namespace). Es la unica entrada de usuarios.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proxy
+  namespace: lomax
+  labels:
+    app: proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: proxy
+  template:
+    metadata:
+      labels:
+        app: proxy
+    spec:
+      containers:
+        - name: proxy
+          image: 000000000000.dkr.ecr.us-east-1.localhost:4566/lomax-proxy:8154c29
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              memory: 64Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proxy
+  namespace: lomax
+spec:
+  selector:
+    app: proxy
+  ports:
+    - port: 80
+      targetPort: 80

@@ -1,0 +1,39 @@
+﻿**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20260929192644
+Nombre de usuario: JEANST23IC\jean2
+Usuario RunAs: JEANST23IC\jean2
+Nombre de la configuración: 
+Máquina: JEANST23IC (Microsoft Windows NT 10.0.26200.0)
+Aplicación host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Id. de proceso: 19868
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+La transcripción ha comenzado. El archivo de salida es evidencia\e7\sesion_7_5b.txt
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl get deployment backend -n lomax
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl get pods -n lomax -l app=backend -o wide
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "Primeras solicitudes de lote=e7 en cada Pod:"
+Primeras solicitudes de lote=e7 en cada Pod:
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> foreach ($p in (kubectl get pods -n lomax -l app=backend -o name)) {
+    kubectl logs -n lomax $p | Select-String "lote=e7" | Select-Object -First 2 | ForEach-Object { "[$p] $_" }
+}
+[pod/backend-64698dc7d7-d6z6r] INFO:     10.42.0.7:48118 - "GET /categorias?lote=e7&n=1 HTTP/1.1" 200 OK
+[pod/backend-64698dc7d7-d6z6r] INFO:     10.42.0.7:48170 - "GET /categorias?lote=e7&n=7 HTTP/1.1" 200 OK
+[pod/backend-64698dc7d7-qvpgb] INFO:     10.42.0.7:48134 - "GET /categorias?lote=e7&n=3 HTTP/1.1" 200 OK
+[pod/backend-64698dc7d7-qvpgb] INFO:     10.42.0.7:48156 - "GET /categorias?lote=e7&n=5 HTTP/1.1" 200 OK
+[pod/backend-64698dc7d7-wvsht] INFO:     10.42.0.7:48130 - "GET /categorias?lote=e7&n=2 HTTP/1.1" 200 OK
+[pod/backend-64698dc7d7-wvsht] INFO:     10.42.0.7:48140 - "GET /categorias?lote=e7&n=4 HTTP/1.1" 200 OK
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Stop-Transcript
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20260929192647
+**********************

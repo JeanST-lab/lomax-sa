@@ -1,0 +1,41 @@
+﻿**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20260929192425
+Nombre de usuario: JEANST23IC\jean2
+Usuario RunAs: JEANST23IC\jean2
+Nombre de la configuración: 
+Máquina: JEANST23IC (Microsoft Windows NT 10.0.26200.0)
+Aplicación host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Id. de proceso: 19868
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+La transcripción ha comenzado. El archivo de salida es evidencia\e7\sesion_7_4b.txt
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> powershell -ExecutionPolicy Bypass -File .\scripts\eks-hosts.ps1
+deployment.apps/backend restarted
+Waiting for deployment "backend" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "backend" rollout to finish: 1 old replicas are pending termination...
+deployment "backend" successfully rolled out
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> curl.exe -s http://localhost:8090/api/categorias
+ricos y Audio","descripcion":"Teclados, auriculares y accesorios"}]
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> (curl.exe -s http://localhost:8090/api/productos | ConvertFrom-Json).Count
+22
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> curl.exe -s -o evidencia/e7/miniatura_eks.jpg http://localhost:8090/api/productos/33ab0a28-1643-4854-b474-139f026d69a8/imagen
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> (Get-FileHash evidencia\e7\miniatura_eks.jpg).Hash
+7CF6EC7665C10C3C0C632AB4C1D5CB55DBDBDF42D875E551F0A3617B73BAC54D
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl get pods -n lomax
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl logs -n lomax deploy/backend --tail=10
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Stop-Transcript
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20260929192446
+**********************

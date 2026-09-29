@@ -1,0 +1,92 @@
+﻿**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20260929192655
+Nombre de usuario: JEANST23IC\jean2
+Usuario RunAs: JEANST23IC\jean2
+Nombre de la configuración: 
+Máquina: JEANST23IC (Microsoft Windows NT 10.0.26200.0)
+Aplicación host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Id. de proceso: 19868
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+La transcripción ha comenzado. El archivo de salida es evidencia\e7\sesion_7_6.txt
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "=== ANTES ==="
+=== ANTES ===
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl get pods -n lomax -l app=backend -o custom-columns="POD:.metadata.name,UID:.metadata.uid,ESTADO:.status.phase,CREADO:.metadata.creationTimestamp"
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl get deployment backend -n lomax
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $victima = kubectl get pods -n lomax -l app=backend -o jsonpath="{.items[0].metadata.name}"
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $uidAntes = kubectl get pod $victima -n lomax -o jsonpath="{.metadata.uid}"
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "Pod a eliminar: $victima"
+Pod a eliminar: backend-64698dc7d7-d6z6r
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "UID antes:      $uidAntes"
+UID antes:      0b5d3339-326b-4ff9-aa4c-5b9be46aa94e
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl delete pod $victima -n lomax
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "--- justo despues de eliminar ---"
+--- justo despues de eliminar ---
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl get pods -n lomax -l app=backend
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl wait --for=condition=Ready pod -l app=backend -n lomax --timeout=90s
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "=== DESPUES ==="
+=== DESPUES ===
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl get pods -n lomax -l app=backend -o custom-columns="POD:.metadata.name,UID:.metadata.uid,ESTADO:.status.phase,CREADO:.metadata.creationTimestamp"
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl get deployment backend -n lomax
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $uidsDespues = (kubectl get pods -n lomax -l app=backend -o jsonpath="{.items[*].metadata.uid}") -split " "
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> if ($uidsDespues -contains $uidAntes) { "FALLO: el UID $uidAntes sigue existiendo" }
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> else { "OK: el UID $uidAntes ya no existe; fue reemplazado. UID nuevos: $($uidsDespues -join ', ')" }
+else : El término 'else' no se reconoce como nombre de un cmdlet, función, archivo de script o programa ejecutable. 
+Compruebe si escribió correctamente el nombre o, si incluyó una ruta de acceso, compruebe que dicha ruta es correcta e 
+inténtelo de nuevo.
+En línea: 1 Carácter: 1
++ else { "OK: el UID $uidAntes ya no existe; fue reemplazado. UID nuevo ...
++ ~~~~
+    + CategoryInfo          : ObjectNotFound: (else:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+else : El término 'else' no se reconoce como nombre de un cmdlet, función, archivo de script o programa ejecutable.
+Compruebe si escribió correctamente el nombre o, si incluyó una ruta de acceso, compruebe que dicha ruta es correcta e
+inténtelo de nuevo.
+En línea: 1 Carácter: 1
++ else { "OK: el UID $uidAntes ya no existe; fue reemplazado. UID nuevo ...
++ ~~~~
+    + CategoryInfo          : ObjectNotFound: (else:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "=== EVENTOS ==="
+=== EVENTOS ===
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl get events -n lomax --sort-by=.lastTimestamp | Select-String "Killing|SuccessfulCreate|Scheduled|Started" | Select-Object -Last 6
+
+82s         Normal   SuccessfulCreate    replicaset/backend-64698dc7d7    Created pod: backend-64698dc7d7-qvpgb
+82s         Normal   SuccessfulCreate    replicaset/backend-64698dc7d7    Created pod: backend-64698dc7d7-d6z6r
+82s         Normal   Started             pod/backend-64698dc7d7-qvpgb     Started container backend
+9s          Normal   SuccessfulCreate    replicaset/backend-64698dc7d7    Created pod: backend-64698dc7d7-k6skp
+9s          Normal   Killing             pod/backend-64698dc7d7-d6z6r     Stopping container backend
+8s          Normal   Started             pod/backend-64698dc7d7-k6skp     Started container backend
+
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "=== CATALOGO TRAS LA RECUPERACION ==="
+=== CATALOGO TRAS LA RECUPERACION ===
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> curl.exe -s http://localhost:8090/api/categorias
+ricos y Audio","descripcion":"Teclados, auriculares y accesorios"}]
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> (curl.exe -s http://localhost:8090/api/productos | ConvertFrom-Json).Count
+22
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> curl.exe -s -o evidencia/e7/miniatura_tras_recuperacion.jpg http://localhost:8090/api/productos/33ab0a28-1643-4854-b474-139f026d69a8/imagen
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> (Get-FileHash evidencia\e7\miniatura_tras_recuperacion.jpg).Hash
+7CF6EC7665C10C3C0C632AB4C1D5CB55DBDBDF42D875E551F0A3617B73BAC54D
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Stop-Transcript
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20260929192705
+**********************

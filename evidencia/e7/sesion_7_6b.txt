@@ -1,0 +1,28 @@
+﻿**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20260929192813
+Nombre de usuario: JEANST23IC\jean2
+Usuario RunAs: JEANST23IC\jean2
+Nombre de la configuración: 
+Máquina: JEANST23IC (Microsoft Windows NT 10.0.26200.0)
+Aplicación host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Id. de proceso: 19868
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+La transcripción ha comenzado. El archivo de salida es evidencia\e7\sesion_7_6b.txt
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $antes = "0b5d3339-326b-4ff9-aa4c-5b9be46aa94e"; $ahora = (kubectl get pods -n lomax -l app=backend -o jsonpath="{.items[*].metadata.uid}") -split " "; if ($ahora -contains $antes) { "FALLO: el UID $antes sigue existiendo" } else { "OK: el UID $antes ya no existe; fue reemplazado. UID actuales: $($ahora -join ', ')" }
+OK: el UID 0b5d3339-326b-4ff9-aa4c-5b9be46aa94e ya no existe; fue reemplazado. UID actuales: 2fcf15c2-0369-407f-a334-dd71396c297c, 76561d1c-f7b1-40c2-80e3-02407b9685ec, 17d7968f-d944-4f06-bc3e-dcb81eec052b
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl get deployment backend -n lomax
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Stop-Transcript
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20260929192814
+**********************

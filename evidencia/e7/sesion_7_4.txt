@@ -1,0 +1,47 @@
+﻿**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20260929192230
+Nombre de usuario: JEANST23IC\jean2
+Usuario RunAs: JEANST23IC\jean2
+Nombre de la configuración: 
+Máquina: JEANST23IC (Microsoft Windows NT 10.0.26200.0)
+Aplicación host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Id. de proceso: 42948
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+La transcripción ha comenzado. El archivo de salida es evidencia\e7\sesion_7_4.txt
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> docker compose stop
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> docker ps --format "table {{.Names}}\t{{.Status}}"
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl get pods -n lomax -o custom-columns="POD:.metadata.name,IMAGE:.spec.containers[0].image,IMAGEID:.status.containerStatuses[0].imageID"
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> foreach ($r in "backend","frontend","proxy") { "$r ECR: " + (aws ecr describe-images --repository-name lomax-$r --query "imageDetails[0].imageDigest" --output text) }
+backend ECR: sha256:4f4a709c49da4ae3629daa30cea69e5d4aa6ded652e4f3bc6ad63e5a34ba2651
+frontend ECR: sha256:a09943d7e59b43797e73e3c830b9b03cd12377addf5f8779d0b95c09e4b1e56b
+proxy ECR: sha256:e7a416a96984358b5d722a03198950bacc64bdb8bbd355b19a08af5cc967d545
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $pf = Start-Process kubectl -ArgumentList "port-forward -n lomax svc/proxy 8090:80" -PassThru -WindowStyle Hidden
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Start-Sleep -Seconds 4
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> curl.exe -s -o NUL -w "Frontend HTTP %{http_code}`n" http://localhost:8090/
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> curl.exe -s http://localhost:8090/api/categorias
+ame resolution"}}
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> (curl.exe -s http://localhost:8090/api/productos | ConvertFrom-Json).Count
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> curl.exe -s -o evidencia/e7/miniatura_eks.jpg http://localhost:8090/api/productos/33ab0a28-1643-4854-b474-139f026d69a8/imagen
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> (Get-FileHash evidencia\e7\miniatura_eks.jpg).Hash
+AF05CD89CF74BEE88152995B1225C0D8E45822A79E6CBFD35D4C776020128BEA
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl logs -n lomax deploy/backend --tail=15
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Stop-Transcript
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20260929192326
+**********************

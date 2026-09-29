@@ -1,0 +1,82 @@
+﻿**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20260929192823
+Nombre de usuario: JEANST23IC\jean2
+Usuario RunAs: JEANST23IC\jean2
+Nombre de la configuración: 
+Máquina: JEANST23IC (Microsoft Windows NT 10.0.26200.0)
+Aplicación host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Id. de proceso: 19868
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+La transcripción ha comenzado. El archivo de salida es evidencia\e7\sesion_7_7_reconocimiento.txt
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "=== Rutas de la API ==="
+=== Rutas de la API ===
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $o = curl.exe -s http://localhost:8090/api/openapi.json | ConvertFrom-Json
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $o.paths.PSObject.Properties | ForEach-Object { $p = $_.Name; $_.Value.PSObject.Properties.Name | ForEach-Object { "$($_.ToUpper()) $p" } }
+GET /categorias
+GET /productos
+POST /productos
+POST /productos/{pid}/imagen
+GET /productos/{pid}/imagen
+POST /productos/{pid}/reprocesar
+GET /productos/{pid}
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "=== Formulario de registro (POST /productos) ==="
+=== Formulario de registro (POST /productos) ===
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $o.paths.'/productos'.post | ConvertTo-Json -Depth 12
+{
+    "summary":  "Crear Producto",
+    "operationId":  "crear_producto_productos_post",
+    "requestBody":  {
+                        "content":  {
+                                        "application/json":  {
+                                                                 "schema":  {
+                                                                                "$ref":  "#/components/schemas/ProductoIn"
+                                                                            }
+                                                             }
+                                    },
+                        "required":  true
+                    },
+    "responses":  {
+                      "201":  {
+                                  "description":  "Successful Response",
+                                  "content":  {
+                                                  "application/json":  {
+                                                                           "schema":  {
+
+                                                                                      }
+                                                                       }
+                                              }
+                              },
+                      "422":  {
+                                  "description":  "Validation Error",
+                                  "content":  {
+                                                  "application/json":  {
+                                                                           "schema":  {
+                                                                                          "$ref":  "#/components/schemas/HTTPValidationError"
+                                                                                      }
+                                                                       }
+                                              }
+                              }
+                  }
+}
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> "=== Datos actuales ==="
+=== Datos actuales ===
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> docker exec lomax-rds-local psql -U postgres -d lomax_db -c "\dt"
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> aws dynamodb list-tables
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> aws s3 ls
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Stop-Transcript
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20260929192828
+**********************

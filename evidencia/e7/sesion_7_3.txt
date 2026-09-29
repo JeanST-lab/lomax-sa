@@ -1,0 +1,55 @@
+﻿**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20260929192044
+Nombre de usuario: JEANST23IC\jean2
+Usuario RunAs: JEANST23IC\jean2
+Nombre de la configuración: 
+Máquina: JEANST23IC (Microsoft Windows NT 10.0.26200.0)
+Aplicación host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Id. de proceso: 42948
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+La transcripción ha comenzado. El archivo de salida es evidencia\e7\sesion_7_3.txt
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> # 1. Namespace y ConfigMap
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl apply -f k8s/config.yaml
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> # 2. Secret con la contrasena de lomax-rds-local (no se imprime)
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> $pw = (docker inspect lomax-rds-local --format "{{range .Config.Env}}{{println .}}{{end}}" | Select-String "^POSTGRES_PASSWORD=").ToString().Trim().Split("=",2)[1]
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl create secret generic lomax-db -n lomax --from-literal=DB_PASSWORD="$pw" --dry-run=client -o yaml | kubectl apply -f -
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Remove-Variable pw
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> # 3. Despliegues
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl apply -f k8s/backend.yaml -f k8s/frontend.yaml -f k8s/proxy.yaml
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> # 4. Observar
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Start-Sleep -Seconds 45
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl get pods -n lomax -o wide
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl get events -n lomax --sort-by=.lastTimestamp | Select-Object -Last 15
+46s         Normal   SuccessfulCreate    replicaset/backend-f65cd4879     Created pod: backend-f65cd4879-h26zc
+46s         Normal   ScalingReplicaSet   deployment/backend               Scaled up replica set backend-f65cd4879 from 0 to 1
+46s         Normal   ScalingReplicaSet   deployment/frontend              Scaled up replica set frontend-86766c7f46 from 0 to 1
+45s         Normal   Pulling             pod/proxy-565bdf469d-pzgtf       Pulling image "000000000000.dkr.ecr.us-east-1.localhost:4566/lomax-proxy:8154c29"
+45s         Normal   Pulling             pod/frontend-86766c7f46-fz4sc    Pulling image "000000000000.dkr.ecr.us-east-1.localhost:4566/lomax-frontend:8154c29"
+45s         Normal   Pulling             pod/backend-f65cd4879-h26zc      Pulling image "000000000000.dkr.ecr.us-east-1.localhost:4566/lomax-backend:8154c29"
+44s         Normal   Created             pod/frontend-86766c7f46-fz4sc    Created container: frontend
+44s         Normal   Started             pod/frontend-86766c7f46-fz4sc    Started container frontend
+44s         Normal   Pulled              pod/frontend-86766c7f46-fz4sc    Successfully pulled image "000000000000.dkr.ecr.us-east-1.localhost:4566/lomax-frontend:8154c29" in 1.241s (1.241s including waiting). Image size: 20981148 bytes.
+44s         Normal   Pulled              pod/proxy-565bdf469d-pzgtf       Successfully pulled image "000000000000.dkr.ecr.us-east-1.localhost:4566/lomax-proxy:8154c29" in 1.207s (1.207s including waiting). Image size: 20975231 bytes.
+44s         Normal   Created             pod/proxy-565bdf469d-pzgtf       Created container: proxy
+44s         Normal   Started             pod/proxy-565bdf469d-pzgtf       Started container proxy
+41s         Normal   Started             pod/backend-f65cd4879-h26zc      Started container backend
+41s         Normal   Created             pod/backend-f65cd4879-h26zc      Created container: backend
+41s         Normal   Pulled              pod/backend-f65cd4879-h26zc      Successfully pulled image "000000000000.dkr.ecr.us-east-1.localhost:4566/lomax-backend:8154c29" in 4.289s (4.289s including waiting). Image size: 73903266 bytes.
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Stop-Transcript
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20260929192140
+**********************
