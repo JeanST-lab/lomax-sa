@@ -1,0 +1,103 @@
+﻿REPORTE E5 - Frontend Lomax SA
+Fecha: 2026-09-29T18:43:57
+Entrada (proxy): http://localhost:8080 | codigo registrado desde el formulario: TEST-E5-001
+
+=== 1. Proxy: frontend en / y API en /api ===
+>> GET / -> HTTP 200 (text/html)
+   (639 bytes)
+  [OK]     GET / -> 200 (frontend servido por el proxy)
+>> GET /api/categorias -> HTTP 200 (application/json)
+   [{"categoria_id":1,"nombre":"Laptops y Computo","descripcion":"Equipos portátiles y de escritorio"},{"categoria_id":2,"nombre":"Monitores y Pantallas","descripcion":"Pantallas de alta definición y gaming"},{"categoria_id":3,"nombre":"Periféricos y Audio","descripcion":"Teclados, auriculares y accesorios"}]
+  [OK]     GET /api/categorias -> 200 (API tras el proxy)
+
+=== 2. Producto registrado desde el formulario ===
+   [RDS] SELECT producto_id || '|' || estado FROM productos WHERE codigo='TEST-E5-001'  =>  33ab0a28-1643-4854-b474-139f026d69a8|PUBLICADO
+  [OK]     RDS: existe una fila con ese codigo
+   producto_id = 33ab0a28-1643-4854-b474-139f026d69a8
+  [OK]     RDS: estado PUBLICADO
+>> GET /api/productos/33ab0a28-1643-4854-b474-139f026d69a8 -> HTTP 200 (application/json)
+   {"producto_id":"33ab0a28-1643-4854-b474-139f026d69a8","codigo":"TEST-E5-001","nombre":"Monitor de prueba E5","descripcion":"Producto registrado para la verificación E5","precio":199.9,"categoria_id":2,"fecha":"2026-09-29T22:42:11.238829","estado":"PUBLICADO","atributos":{"color":"negro","tamano":"pulgadas"},"estado_imagen":"PROCESADO","miniatura":{"bucket":"lomax-imagenes-miniaturas","key":"miniaturas/33ab0a28-1643-4854-b474-139f026d69a8/original_300.jpg","url":"s3://lomax-imagenes-miniaturas/mi
+  [OK]     GET /api/productos/{id} -> 200 y PUBLICADO
+  [OK]     el detalle trae descripcion y atributos
+   [DynamoDB get-item 33ab0a28-1643-4854-b474-139f026d69a8]
+{
+    "Item": {
+        "producto_id": {
+            "S": "33ab0a28-1643-4854-b474-139f026d69a8"
+        },
+        "atributos_json": {
+            "S": "{\"color\": \"negro\", \"tamano\": \"pulgadas\"}"
+        },
+        "estado_procesamiento": {
+            "S": "PROCESADO"
+        },
+        "miniatura_bucket": {
+            "S": "lomax-imagenes-miniaturas"
+        },
+        "miniatura_key": {
+            "S": "miniaturas/33ab0a28-1643-4854-b474-139f026d69a8/original_300.jpg"
+        },
+        "miniatura_url": {
+            "S": "s3://lomax-imagenes-miniaturas/miniaturas/33ab0a28-1643-4854-b474-139f026d69a8/original_300.jpg"
+        },
+        "original_key": {
+            "S": "originales/33ab0a28-1643-4854-b474-139f026d69a8/original.jpg"
+        },
+        "error_detalle": {
+            "S": ""
+        }
+    }
+}
+  [OK]     DynamoDB: atributos_json presente
+  [OK]     DynamoDB: estado_procesamiento PROCESADO
+  [OK]     DynamoDB: miniatura_key = miniaturas/33ab0a28-1643-4854-b474-139f026d69a8/original_300.jpg
+  [OK]     S3: existe el original
+  [OK]     S3: miniatura descargada (evidencia\e5\miniatura_s3.jpg)
+>> GET /api/productos/33ab0a28-1643-4854-b474-139f026d69a8/imagen -> HTTP 200 (image/jpeg)
+   (16584 bytes)
+  [OK]     GET /api/productos/{id}/imagen -> 200 image/jpeg
+   SHA256 API: 7CF6EC7665C10C3C0C632AB4C1D5CB55DBDBDF42D875E551F0A3617B73BAC54D
+   SHA256 S3 : 7CF6EC7665C10C3C0C632AB4C1D5CB55DBDBDF42D875E551F0A3617B73BAC54D
+  [OK]     bytes del endpoint == miniatura descargada de S3
+>> GET /api/productos -> HTTP 200 (application/json)
+   [{"producto_id":"a1b2c3d4-e5f6-7890-abcd-ef1234567801","codigo":"LAP-ASUS-001","nombre":"ASUS ROG Strix G16","descripcion":"Laptop gamer de alto rendimiento","precio":1499.99,"categoria_id":1,"fecha":"2026-09-29T17:59:51.199422","estado":"PUBLICADO","atributos":{"procesador":"Intel i7","ram":"16GB","gpu":"RTX 4060","pantalla":"16 pulgadas 165Hz"},"estado_imagen":"PROCESADO","miniatura":{"bucket":"lomax-imagenes-miniaturas","key":"miniaturas/a1b2c3d4-e5f6-7890-abcd-ef1234567801/original_300.jpg",
+  [OK]     el producto aparece en el catalogo (GET /api/productos)
+
+=== 3. Codigo duplicado ===
+>> POST /api/productos -> HTTP 409 (application/json)
+   {"error":{"paso":"rds","detalle":"El codigo 'TEST-E5-001' ya existe"}}
+  [OK]     codigo duplicado -> 409
+  [OK]     la respuesta identifica el paso: rds
+   [RDS] SELECT count(*) FROM productos WHERE codigo='TEST-E5-001'  =>  1
+  [OK]     RDS: sigue habiendo 1 sola fila con ese codigo
+
+=== 4. Archivo invalido: producto incompleto fuera del catalogo ===
+>> POST /api/productos -> HTTP 201 (application/json)
+   {"producto_id":"1f6764c3-cb73-4bf7-ae93-254876b78f00","estado":"PENDIENTE"}
+  [OK]     producto creado (201) en PENDIENTE
+>> POST /api/productos/1f6764c3-cb73-4bf7-ae93-254876b78f00/imagen -> HTTP 415 (application/json)
+   {"error":{"paso":"validacion_formato","detalle":"El contenido no es un JPEG ni un PNG valido"},"producto_id":"1f6764c3-cb73-4bf7-ae93-254876b78f00","estado":"PENDIENTE"}
+  [OK]     archivo invalido -> 415
+   [RDS] SELECT estado FROM productos WHERE producto_id='1f6764c3-cb73-4bf7-ae93-254876b78f00'  =>  PENDIENTE
+  [OK]     RDS: el producto sigue PENDIENTE
+>> GET /api/productos -> HTTP 200 (application/json)
+   [{"producto_id":"a1b2c3d4-e5f6-7890-abcd-ef1234567801","codigo":"LAP-ASUS-001","nombre":"ASUS ROG Strix G16","descripcion":"Laptop gamer de alto rendimiento","precio":1499.99,"categoria_id":1,"fecha":"2026-09-29T17:59:51.199422","estado":"PUBLICADO","atributos":{"procesador":"Intel i7","ram":"16GB","gpu":"RTX 4060","pantalla":"16 pulgadas 165Hz"},"estado_imagen":"PROCESADO","miniatura":{"bucket":"lomax-imagenes-miniaturas","key":"miniaturas/a1b2c3d4-e5f6-7890-abcd-ef1234567801/original_300.jpg",
+  [OK]     el producto incompleto NO aparece en el catalogo
+   (queda un producto PENDIENTE de prueba: E5-INV-20260929184357, 1f6764c3-cb73-4bf7-ae93-254876b78f00)
+
+=== 5. Los 20 productos iniciales publicados (catalogo, RDS, DynamoDB, S3) ===
+   [RDS] publicados con codigo ^(LAP|MON|PER)- => 21
+  [FALLO]  RDS: 20 productos iniciales PUBLICADO  
+>> GET /api/productos -> HTTP 200 (application/json)
+   [{"producto_id":"a1b2c3d4-e5f6-7890-abcd-ef1234567801","codigo":"LAP-ASUS-001","nombre":"ASUS ROG Strix G16","descripcion":"Laptop gamer de alto rendimiento","precio":1499.99,"categoria_id":1,"fecha":"2026-09-29T17:59:51.199422","estado":"PUBLICADO","atributos":{"procesador":"Intel i7","ram":"16GB","gpu":"RTX 4060","pantalla":"16 pulgadas 165Hz"},"estado_imagen":"PROCESADO","miniatura":{"bucket":"lomax-imagenes-miniaturas","key":"miniaturas/a1b2c3d4-e5f6-7890-abcd-ef1234567801/original_300.jpg",
+  [FALLO]  catalogo (API): 20 productos iniciales  (hay 21)
+   [RDS] SELECT count(*) FROM productos WHERE estado='PUBLICADO'  =>  22
+  [OK]     catalogo total == publicados en RDS (22)
+   DynamoDB PROCESADO: 21 de 21 | miniatura en S3: 21 de 21
+  [FALLO]  DynamoDB: los 20 con estado PROCESADO  
+  [FALLO]  S3: las 20 miniaturas existen  
+
+=== RESUMEN ===
+Verificaciones OK: 22 | FALLO: 4
+Producto del formulario: 33ab0a28-1643-4854-b474-139f026d69a8 (codigo TEST-E5-001)
+Reporte: evidencia\e5\reporte.txt

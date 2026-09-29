@@ -1,0 +1,222 @@
+﻿[
+    {
+        "producto_id": {
+            "S": "a1b2c3d4-e5f6-7890-abcd-ef1234567801"
+        },
+        "estado_procesamiento": {
+            "S": "PENDIENTE_IMAGEN"
+        },
+        "atributos_json": {
+            "S": "{\"procesador\":\"Intel i7\",\"ram\":\"16GB\",\"gpu\":\"RTX 4060\",\"pantalla\":\"16 pulgadas 165Hz\"}"
+        }
+    },
+    {
+        "producto_id": {
+            "S": "a1b2c3d4-e5f6-7890-abcd-ef1234567802"
+        },
+        "estado_procesamiento": {
+            "S": "PENDIENTE_IMAGEN"
+        },
+        "atributos_json": {
+            "S": "{\"procesador\":\"AMD Ryzen 5\",\"ram\":\"8GB\",\"almacenamiento\":\"512GB SSD\"}"
+        }
+    },
+    {
+        "producto_id": {
+            "S": "a1b2c3d4-e5f6-7890-abcd-ef1234567803"
+        },
+        "estado_procesamiento": {
+            "S": "PENDIENTE_IMAGEN"
+        },
+        "atributos_json": {
+            "S": "{\"procesador\":\"Intel i5\",\"ram\":\"16GB\",\"peso\":\"1.75 kg\"}"
+        }
+    },
+    {
+        "producto_id": {
+            "S": "a1b2c3d4-e5f6-7890-abcd-ef1234567804"
+        },
+        "estado_procesamiento": {
+            "S": "PENDIENTE_IMAGEN"
+        },
+        "atributos_json": {
+            "S": "{\"procesador\":\"Apple M2\",\"ram\":\"8GB\",\"bateria\":\"Hasta 18 horas\"}"
+        }
+    },
+    {
+        "producto_id": {
+            "S": "a1b2c3d4-e5f6-7890-abcd-ef1234567805"
+        },
+        "estado_procesamiento": {
+            "S": "PENDIENTE_IMAGEN"
+        },
+        "atributos_json": {
+            "S": "{\"procesador\":\"Intel i5\",\"gpu\":\"GTX 1650\",\"ram\":\"8GB\"}"
+        }
+    },
+    {
+        "producto_id": {
+            "S": "a1b2c3d4-e5f6-7890-abcd-ef1234567806"
+        },
+        "estado_procesamiento": {
+            "S": "PENDIENTE_IMAGEN"
+        },
+        "atributos_json": {
+            "S": "{\"pulgadas\":\"27\",\"resolucion\":\"1920x1080\",\"tipo_panel\":\"VA\",\"curvatura\":\"1500R\"}"
+        }
+    },
+    {
+        "producto_id": {
+            "S": "a1b2c3d4-e5f6-7890-abcd-ef1234567807"
+        },
+        "estado_procesamiento": {
+            "S": "PENDIENTE_IMAGEN"
+        },
+        "atributos_json": {
+            "S": "{\"pulgadas\":\"29\",\"resolucion\":\"2560x1080\",\"puertos\":\"HDMI / DisplayPort\"}"
+        }
+    },
+    {
+        "producto_id": {
+            "S": "a1b2c3d4-e5f6-7890-abcd-ef1234567808"
+        },
+        "estado_procesamiento": {
+            "S": "PENDIENTE_IMAGEN"
+        },
+        "atributos_json": {
+            "S": "{\"pulgadas\":\"24\",\"resolucion\":\"1920x1080\",\"tiempo_respuesta\":\"1ms\"}"
+        }
+    },
+    {
+        "producto_id": {
+            "S": "a1b2c3d4-e5f6-7890-abcd-ef1234567809"
+        },
+        "estado_procesamiento": {
+            "S": "PENDIENTE_IMAGEN"
+        },
+        "atributos_json": {
+            "S": "{\"pulgadas\":\"34\",\"resolucion\":\"3440x1440\",\"frecuencia\":\"144Hz\"}"
+        }
+    },
+    {
+        "producto_id": {
+            "S": "a1b2c3d4-e5f6-7890-abcd-ef1234567810"
+        },
+        "estado_procesamiento": {
+            "S": "PENDIENTE_IMAGEN"
+        },
+        "atributos_json": {
+            "S": "{\"pulgadas\":\"23.8\",\"resolucion\":\"1920x1080\",\"panel\":\"IPS\"}"
+        }
+    },
+    {
+        "producto_id": {
+            "S": "a1b2c3d4-e5f6-7890-abcd-ef1234567811"
+        },
+        "estado_procesamiento": {
+            "S": "PENDIENTE_IMAGEN"
+        },
+        "atributos_json": {
+            "S": "{\"conexion\":\"Inalámbrica Lightspeed\",\"distribucion\":\"Español\",\"switches\":\"Tactile GX Brown\"}"
+        }
+    },
+    {
+        "producto_id": {
+            "S": "a1b2c3d4-e5f6-7890-abcd-ef1234567812"
+        },
+        "estado_procesamiento": {
+            "S": "PENDIENTE_IMAGEN"
+        },
+        "atributos_json": {
+            "S": "{\"sensor\":\"Focus Pro 30K\",\"conexion\":\"USB Cableado\",\"peso\":\"59g\"}"
+        }
+    },
+    {
+        "producto_id": {
+            "S": "a1b2c3d4-e5f6-7890-abcd-ef1234567813"
+        },
+        "estado_procesamiento": {
+            "S": "PENDIENTE_IMAGEN"
+        },
+        "atributos_json": {
+            "S": "{\"audio\":\"Surround 7.1\",\"autonomia\":\"16 horas\",\"conexion\":\"RF 2.4GHz\"}"
+        }
+    },
+    {
+        "producto_id": {
+            "S": "a1b2c3d4-e5f6-7890-abcd-ef1234567814"
+        },
+        "estado_procesamiento": {
+            "S": "PENDIENTE_IMAGEN"
+        },
+        "atributos_json": {
+            "S": "{\"patron_polar\":\"Estéreo, Omnidireccional, Cardioide, Bidireccional\",\"compatibilidad\":\"PC / PS5\"}"
+        }
+    },
+    {
+        "producto_id": {
+            "S": "a1b2c3d4-e5f6-7890-abcd-ef1234567815"
+        },
+        "estado_procesamiento": {
+            "S": "PENDIENTE_IMAGEN"
+        },
+        "atributos_json": {
+            "S": "{\"cancelacion_ruido\":\"ANC Activa\",\"conectividad\":\"Bluetooth 5.2\"}"
+        }
+    },
+    {
+        "producto_id": {
+            "S": "a1b2c3d4-e5f6-7890-abcd-ef1234567816"
+        },
+        "estado_procesamiento": {
+            "S": "PENDIENTE_IMAGEN"
+        },
+        "atributos_json": {
+            "S": "{\"conexion\":\"USB\",\"distribucion\":\"Español\",\"iluminacion\":\"LED Rojo\"}"
+        }
+    },
+    {
+        "producto_id": {
+            "S": "a1b2c3d4-e5f6-7890-abcd-ef1234567817"
+        },
+        "estado_procesamiento": {
+            "S": "PENDIENTE_IMAGEN"
+        },
+        "atributos_json": {
+            "S": "{\"dimensiones\":\"400 x 460 mm\",\"grosor\":\"3 mm\"}"
+        }
+    },
+    {
+        "producto_id": {
+            "S": "a1b2c3d4-e5f6-7890-abcd-ef1234567818"
+        },
+        "estado_procesamiento": {
+            "S": "PENDIENTE_IMAGEN"
+        },
+        "atributos_json": {
+            "S": "{\"compatibilidad\":\"PS5 / PC\",\"retroalimentacion\":\"Háptica avanzada\"}"
+        }
+    },
+    {
+        "producto_id": {
+            "S": "a1b2c3d4-e5f6-7890-abcd-ef1234567819"
+        },
+        "estado_procesamiento": {
+            "S": "PENDIENTE_IMAGEN"
+        },
+        "atributos_json": {
+            "S": "{\"teclas\":\"15 LCD personalizables\",\"interfaz\":\"USB-C\"}"
+        }
+    },
+    {
+        "producto_id": {
+            "S": "a1b2c3d4-e5f6-7890-abcd-ef1234567820"
+        },
+        "estado_procesamiento": {
+            "S": "PENDIENTE_IMAGEN"
+        },
+        "atributos_json": {
+            "S": "{\"resolucion\":\"1080p/30fps\",\"enfoque\":\"Automático\"}"
+        }
+    }
+]

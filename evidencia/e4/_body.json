@@ -1,0 +1,10 @@
+{
+    "descripcion":  "prueba de fallo",
+    "nombre":  "Producto con imagen corrupta",
+    "categoria_id":  1,
+    "atributos":  {
+                      "nota":  "corrupto"
+                  },
+    "precio":  10,
+    "codigo":  "E4B-20260929171123"
+}

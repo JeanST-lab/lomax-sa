@@ -1,0 +1,189 @@
+{
+  "categorias": [
+    {"categoria_id": 1, "nombre": "Laptops y Computo", "descripcion": "Equipos portátiles y de escritorio"},
+    {"categoria_id": 2, "nombre": "Monitores y Pantallas", "descripcion": "Pantallas de alta definición y gaming"},
+    {"categoria_id": 3, "nombre": "Periféricos y Audio", "descripcion": "Teclados, auriculares y accesorios"}
+  ],
+  "productos": [
+    {
+      "producto_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567801",
+      "codigo": "LAP-ASUS-001",
+      "nombre": "ASUS ROG Strix G16",
+      "descripcion": "Laptop gamer de alto rendimiento",
+      "precio": 1499.99,
+      "categoria_id": 1,
+      "atributos": {"procesador": "Intel i7", "ram": "16GB", "gpu": "RTX 4060", "pantalla": "16 pulgadas 165Hz"}
+    },
+    {
+      "producto_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567802",
+      "codigo": "LAP-LEN-002",
+      "nombre": "Lenovo IdeaPad 3",
+      "descripcion": "Laptop para oficina y estudio",
+      "precio": 550.00,
+      "categoria_id": 1,
+      "atributos": {"procesador": "AMD Ryzen 5", "ram": "8GB", "almacenamiento": "512GB SSD"}
+    },
+    {
+      "producto_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567803",
+      "codigo": "LAP-HP-003",
+      "nombre": "HP Pavilion 15",
+      "descripcion": "Laptop multimedia con diseño elegante",
+      "precio": 720.50,
+      "categoria_id": 1,
+      "atributos": {"procesador": "Intel i5", "ram": "16GB", "peso": "1.75 kg"}
+    },
+    {
+      "producto_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567804",
+      "codigo": "LAP-MAC-004",
+      "nombre": "MacBook Air M2",
+      "descripcion": "Portátil ultraligera con chip M2",
+      "precio": 1199.00,
+      "categoria_id": 1,
+      "atributos": {"procesador": "Apple M2", "ram": "8GB", "bateria": "Hasta 18 horas"}
+    },
+    {
+      "producto_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567805",
+      "codigo": "LAP-ACER-005",
+      "nombre": "Acer Nitro 5",
+      "descripcion": "Laptop gamer económica",
+      "precio": 850.00,
+      "categoria_id": 1,
+      "atributos": {"procesador": "Intel i5", "gpu": "GTX 1650", "ram": "8GB"}
+    },
+    {
+      "producto_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567806",
+      "codigo": "MON-SAM-006",
+      "nombre": "Monitor Samsung Odyssey G3",
+      "descripcion": "Monitor curvo gaming 144Hz",
+      "precio": 280.00,
+      "categoria_id": 2,
+      "atributos": {"pulgadas": "27", "resolucion": "1920x1080", "tipo_panel": "VA", "curvatura": "1500R"}
+    },
+    {
+      "producto_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567807",
+      "codigo": "MON-LG-007",
+      "nombre": "Monitor LG UltraWide 29",
+      "descripcion": "Monitor panorámico para productividad",
+      "precio": 299.99,
+      "categoria_id": 2,
+      "atributos": {"pulgadas": "29", "resolucion": "2560x1080", "puertos": "HDMI / DisplayPort"}
+    },
+    {
+      "producto_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567808",
+      "codigo": "MON-ASUS-008",
+      "nombre": "Monitor ASUS TUF Gaming",
+      "descripcion": "Monitor IPS 165Hz con sincronización adaptativa",
+      "precio": 320.00,
+      "categoria_id": 2,
+      "atributos": {"pulgadas": "24", "resolucion": "1920x1080", "tiempo_respuesta": "1ms"}
+    },
+    {
+      "producto_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567809",
+      "codigo": "MON-XIA-009",
+      "nombre": "Xiaomi Curved Gaming Monitor",
+      "descripcion": "Monitor ultra ancho para juegos inmersivos",
+      "precio": 390.00,
+      "categoria_id": 2,
+      "atributos": {"pulgadas": "34", "resolucion": "3440x1440", "frecuencia": "144Hz"}
+    },
+    {
+      "producto_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567810",
+      "codigo": "MON-DEL-010",
+      "nombre": "Monitor Dell 24 Oficina",
+      "descripcion": "Monitor FHD con tecnología comfortview",
+      "precio": 160.00,
+      "categoria_id": 2,
+      "atributos": {"pulgadas": "23.8", "resolucion": "1920x1080", "panel": "IPS"}
+    },
+    {
+      "producto_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567811",
+      "codigo": "PER-LOG-011",
+      "nombre": "Teclado Mecánico Logitech G Pro",
+      "descripcion": "Teclado compacto RGB para esports",
+      "precio": 129.99,
+      "categoria_id": 3,
+      "atributos": {"conexion": "Inalámbrica Lightspeed", "distribucion": "Español", "switches": "Tactile GX Brown"}
+    },
+    {
+      "producto_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567812",
+      "codigo": "PER-RAZ-012",
+      "nombre": "Mouse Razer DeathAdder V3",
+      "descripcion": "Mouse ergonómico ultraligero",
+      "precio": 69.99,
+      "categoria_id": 3,
+      "atributos": {"sensor": "Focus Pro 30K", "conexion": "USB Cableado", "peso": "59g"}
+    },
+    {
+      "producto_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567813",
+      "codigo": "PER-COR-013",
+      "nombre": "Audífonos Corsair Void RGB Elite",
+      "descripcion": "Auriculares inalámbricos con sonido 7.1",
+      "precio": 99.99,
+      "categoria_id": 3,
+      "atributos": {"audio": "Surround 7.1", "autonomia": "16 horas", "conexion": "RF 2.4GHz"}
+    },
+    {
+      "producto_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567814",
+      "codigo": "PER-HYP-014",
+      "nombre": "Micrófono HyperX QuadCast S",
+      "descripcion": "Micrófono condensador USB con iluminación RGB",
+      "precio": 159.99,
+      "categoria_id": 3,
+      "atributos": {"patron_polar": "Estéreo, Omnidireccional, Cardioide, Bidireccional", "compatibilidad": "PC / PS5"}
+    },
+    {
+      "producto_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567815",
+      "codigo": "PER-SAM-015",
+      "nombre": "Galaxy Buds FE",
+      "descripcion": "Auriculares in-ear con cancelación de ruido",
+      "precio": 89.00,
+      "categoria_id": 3,
+      "atributos": {"cancelacion_ruido": "ANC Activa", "conectividad": "Bluetooth 5.2"}
+    },
+    {
+      "producto_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567816",
+      "codigo": "PER-RED-016",
+      "nombre": "Teclado Redragon Kumara",
+      "descripcion": "Teclado mecánico TKL switchout",
+      "precio": 45.00,
+      "categoria_id": 3,
+      "atributos": {"conexion": "USB", "distribucion": "Español", "iluminacion": "LED Rojo"}
+    },
+    {
+      "producto_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567817",
+      "codigo": "PER-LOG-017",
+      "nombre": "Mousepad Logitech G640",
+      "descripcion": "Alfombrilla de tela grande para baja sensibilidad",
+      "precio": 39.99,
+      "categoria_id": 3,
+      "atributos": {"dimensiones": "400 x 460 mm", "grosor": "3 mm"}
+    },
+    {
+      "producto_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567818",
+      "codigo": "PER-SON-018",
+      "nombre": "Sony DualSense Controller",
+      "descripcion": "Control inalambrico PS5 Edición Especial",
+      "precio": 74.99,
+      "categoria_id": 3,
+      "atributos": {"compatibilidad": "PS5 / PC", "retroalimentacion": "Háptica avanzada"}
+    },
+    {
+      "producto_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567819",
+      "codigo": "PER-ELG-019",
+      "nombre": "Elgato Stream Deck MK.2",
+      "descripcion": "Panel de control con 15 teclas LCD personalizables",
+      "precio": 149.99,
+      "categoria_id": 3,
+      "atributos": {"teclas": "15 LCD personalizables", "interfaz": "USB-C"}
+    },
+    {
+      "producto_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567820",
+      "codigo": "PER-LOG-020",
+      "nombre": "Webcam Logitech C920s Pro",
+      "descripcion": "Cámara web Full HD 1080p con cubierta de privacidad",
+      "precio": 69.99,
+      "categoria_id": 3,
+      "atributos": {"resolucion": "1080p/30fps", "enfoque": "Automático"}
+    }
+  ]
+}

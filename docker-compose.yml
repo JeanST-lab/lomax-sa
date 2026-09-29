@@ -1,0 +1,45 @@
+# Frontend + backend + proxy en una red propia. RDS (Postgres) y FLOCI corren aparte,
+# publicados en el host (5432 y 4566); el backend los alcanza por host.docker.internal.
+# Las variables AWS usan el prefijo LOMAX_ para que no las pisen las AWS_* de la sesion de PowerShell.
+name: lomax
+
+services:
+  backend:
+    build: ./backend
+    image: lomax-backend:latest
+    environment:
+      RDS_DB: ${DB_NAME:-lomax_db}
+      DB_NAME: ${DB_NAME:-lomax_db}
+      POSTGRES_DB: ${DB_NAME:-lomax_db}
+      DB_HOST: ${DB_HOST:-host.docker.internal}
+      POSTGRES_HOST: ${DB_HOST:-host.docker.internal}
+      RDS_HOST: ${DB_HOST:-host.docker.internal}
+      AWS_ENDPOINT_URL: ${LOMAX_AWS_ENDPOINT:-http://host.docker.internal:4566}
+      AWS_ACCESS_KEY_ID: ${LOMAX_AWS_KEY:-test}
+      AWS_SECRET_ACCESS_KEY: ${LOMAX_AWS_SECRET:-test}
+      AWS_DEFAULT_REGION: ${LOMAX_AWS_REGION:-us-east-1}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "8000:8000"          # acceso directo a la API para los scripts de prueba (E4)
+    networks: [lomax-net]
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    image: lomax-frontend:latest
+    networks: [lomax-net]
+    restart: unless-stopped
+
+  proxy:
+    build: ./proxy
+    image: lomax-proxy:latest
+    ports:
+      - "${PROXY_PORT:-8080}:80"   # unica entrada de usuarios
+    depends_on: [backend, frontend]
+    networks: [lomax-net]
+    restart: unless-stopped
+
+networks:
+  lomax-net:
+    driver: bridge

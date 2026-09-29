@@ -1,0 +1,276 @@
+﻿REPORTE E4 - API Lomax SA
+Fecha: 2026-09-29T17:11:23
+API: http://localhost:8000 | RDS: contenedor lomax-rds-local (usuario postgres, base lomax_db) | AWS: http://localhost:4566
+
+=== A. GET /categorias ===
+>> GET /categorias -> HTTP 200 (application/json)
+   [{"categoria_id":1,"nombre":"Laptops y Computo","descripcion":"Equipos portátiles y de escritorio"},{"categoria_id":2,"nombre":"Monitores y Pantallas","descripcion":"Pantallas de alta definición y gaming"},{"categoria_id":3,"nombre":"Periféricos y Audio","descripcion":"Teclados, auriculares y accesorios"}]
+  [OK]     HTTP 200
+   [RDS] SELECT count(*) FROM categorias  =>  3
+  [OK]     categorias de la API == filas en RDS (3)
+
+=== B. POST /productos (201, PENDIENTE) ===
+>> POST /productos -> HTTP 201 (application/json)
+   {"producto_id":"838a284c-5786-46f6-97a3-fcb59ee32d4f","estado":"PENDIENTE"}
+  [OK]     HTTP 201
+  [OK]     estado PENDIENTE en la respuesta
+   [RDS] SELECT estado FROM productos WHERE producto_id='838a284c-5786-46f6-97a3-fcb59ee32d4f'  =>  PENDIENTE
+  [OK]     RDS: fila con estado PENDIENTE
+   [DynamoDB get-item 838a284c-5786-46f6-97a3-fcb59ee32d4f]
+{
+    "Item": {
+        "producto_id": {
+            "S": "838a284c-5786-46f6-97a3-fcb59ee32d4f"
+        },
+        "atributos_json": {
+            "S": "{\"peso_kg\": 1.5, \"color\": \"rojo\"}"
+        },
+        "estado_procesamiento": {
+            "S": "PENDIENTE"
+        }
+    }
+}
+  [OK]     DynamoDB: item con atributos_json
+  [OK]     DynamoDB: estado_procesamiento PENDIENTE
+
+=== C. POST /productos con errores (409, 400) ===
+>> POST /productos -> HTTP 409 (application/json)
+   {"error":{"paso":"rds","detalle":"El codigo 'E4-20260929171123' ya existe"}}
+  [OK]     codigo duplicado -> 409
+   [RDS] SELECT count(*) FROM productos WHERE codigo='E4-20260929171123'  =>  1
+  [OK]     solo existe 1 fila con ese codigo en RDS
+>> POST /productos -> HTTP 400 (application/json)
+   {"error":{"paso":"validacion","detalle":"body.precio: Input should be greater than or equal to 0"}}
+  [OK]     precio negativo -> 400
+>> POST /productos -> HTTP 400 (application/json)
+   {"error":{"paso":"validacion","detalle":"body.nombre: Field required; body.descripcion: Field required; body.precio: Field required; body.categoria_id: Field required; body.atributos: Field required"}}
+  [OK]     campos faltantes -> 400
+>> POST /productos -> HTTP 400 (application/json)
+   {"error":{"paso":"validacion","detalle":"categoria_id no existe"}}
+  [OK]     categoria inexistente -> 400
+   [RDS] SELECT count(*) FROM productos WHERE codigo LIKE 'E4-MALO-%' OR codigo LIKE 'E4-SINCAT-%' OR codigo='solo-codigo'  =>  0
+  [OK]     RDS: no se creo ningun producto invalido
+
+=== D. Producto PENDIENTE: detalle, listado, imagen y reprocesar ===
+>> GET /productos/838a284c-5786-46f6-97a3-fcb59ee32d4f -> HTTP 200 (application/json)
+   {"producto_id":"838a284c-5786-46f6-97a3-fcb59ee32d4f","codigo":"E4-20260929171123","nombre":"Producto prueba E4","descripcion":"Creado por probar-api.ps1","precio":25.5,"categoria_id":1,"fecha":"2026-09-29T21:11:23.443771","estado":"PENDIENTE","atributos":{"peso_kg":1.5,"color":"rojo"},"estado_imagen":"PENDIENTE","miniatura":null,"imagen_url":null}
+  [OK]     GET /productos/{id} -> 200
+  [OK]     estado PENDIENTE
+  [OK]     atributos combinados desde DynamoDB
+>> GET /productos/no-existe-20260929171123 -> HTTP 404 (application/json)
+   {"error":{"paso":"rds","detalle":"El producto no existe"}}
+  [OK]     GET /productos/{id} inexistente -> 404
+>> GET /productos -> HTTP 200 (application/json)
+   [{"producto_id":"105e46b1-8850-486e-a28c-bcd197dd5559","codigo":"E4-20260929165057","nombre":"Producto prueba E4","descripcion":"Creado por probar-api.ps1","precio":25.5,"categoria_id":1,"fecha":"2026-09-29T20:50:58.141085","estado":"PUBLICADO","atributos":{"peso_kg":1.5,"color":"rojo"},"estado_imagen":"PROCESADO","miniatura":{"bucket":"lomax-imagenes-miniaturas","key":"miniaturas/105e46b1-8850-486e-a28c-bcd197dd5559/original_300.jpg","url":"s3://lomax-imagenes-miniaturas/miniaturas/105e46b1-8850-486e-a28c-bcd197dd5559/original_300.jpg"},"imagen_url":"/productos/105e46b1-8850-486e-a28c-bcd197d
+  [OK]     GET /productos -> 200
+  [OK]     el producto PENDIENTE no aparece en el listado
+>> GET /productos/838a284c-5786-46f6-97a3-fcb59ee32d4f/imagen -> HTTP 404 (application/json)
+   {"error":{"paso":"s3_miniatura","detalle":"Miniatura no disponible"},"producto_id":"838a284c-5786-46f6-97a3-fcb59ee32d4f"}
+  [OK]     GET imagen sin miniatura -> 404
+>> POST /productos/838a284c-5786-46f6-97a3-fcb59ee32d4f/reprocesar -> HTTP 409 (application/json)
+   {"error":{"paso":"s3_original","detalle":"No hay imagen original guardada para este producto"},"producto_id":"838a284c-5786-46f6-97a3-fcb59ee32d4f","estado":"PENDIENTE"}
+  [OK]     reprocesar sin original -> 409
+
+=== E. POST /productos/{id}/imagen con entradas invalidas ===
+>> POST /productos/no-existe-20260929171123/imagen -> HTTP 404 (application/json)
+   {"error":{"paso":"rds","detalle":"El producto no existe"}}
+  [OK]     producto inexistente -> 404
+>> POST /productos/838a284c-5786-46f6-97a3-fcb59ee32d4f/imagen -> HTTP 415 (application/json)
+   {"error":{"paso":"validacion_formato","detalle":"Solo se permite image/jpeg o image/png"},"producto_id":"838a284c-5786-46f6-97a3-fcb59ee32d4f","estado":"PENDIENTE"}
+  [OK]     text/plain -> 415
+>> POST /productos/838a284c-5786-46f6-97a3-fcb59ee32d4f/imagen -> HTTP 415 (application/json)
+   {"error":{"paso":"validacion_formato","detalle":"El contenido no es un JPEG ni un PNG valido"},"producto_id":"838a284c-5786-46f6-97a3-fcb59ee32d4f","estado":"PENDIENTE"}
+  [OK]     texto con cabecera image/jpeg -> 415 (se validan los bytes)
+>> POST /productos/838a284c-5786-46f6-97a3-fcb59ee32d4f/imagen -> HTTP 413 (application/json)
+   {"error":{"paso":"validacion_tamano","detalle":"El archivo supera 5 MB"},"producto_id":"838a284c-5786-46f6-97a3-fcb59ee32d4f","estado":"PENDIENTE"}
+  [OK]     archivo de 6 MB -> 413
+   [RDS] SELECT estado FROM productos WHERE producto_id='838a284c-5786-46f6-97a3-fcb59ee32d4f'  =>  PENDIENTE
+  [OK]     RDS: sigue PENDIENTE
+   [S3] ls s3://lomax-imagenes-originales/originales/838a284c-5786-46f6-97a3-fcb59ee32d4f/  =>  0 objeto(s)
+  [OK]     S3: no se guardo ningun original
+
+=== F. POST /productos/{id}/imagen valida (200, PUBLICADO) ===
+>> POST /productos/838a284c-5786-46f6-97a3-fcb59ee32d4f/imagen -> HTTP 200 (application/json)
+   {"producto_id":"838a284c-5786-46f6-97a3-fcb59ee32d4f","estado":"PUBLICADO","original_key":"originales/838a284c-5786-46f6-97a3-fcb59ee32d4f/original.jpg","miniatura_key":"miniaturas/838a284c-5786-46f6-97a3-fcb59ee32d4f/original_300.jpg","dimensiones":[300,200]}
+  [OK]     HTTP 200
+  [OK]     estado PUBLICADO en la respuesta
+   [RDS] SELECT estado FROM productos WHERE producto_id='838a284c-5786-46f6-97a3-fcb59ee32d4f'  =>  PUBLICADO
+  [OK]     RDS: estado PUBLICADO
+   [DynamoDB get-item 838a284c-5786-46f6-97a3-fcb59ee32d4f]
+{
+    "Item": {
+        "producto_id": {
+            "S": "838a284c-5786-46f6-97a3-fcb59ee32d4f"
+        },
+        "atributos_json": {
+            "S": "{\"peso_kg\": 1.5, \"color\": \"rojo\"}"
+        },
+        "estado_procesamiento": {
+            "S": "PROCESADO"
+        },
+        "miniatura_bucket": {
+            "S": "lomax-imagenes-miniaturas"
+        },
+        "miniatura_key": {
+            "S": "miniaturas/838a284c-5786-46f6-97a3-fcb59ee32d4f/original_300.jpg"
+        },
+        "miniatura_url": {
+            "S": "s3://lomax-imagenes-miniaturas/miniaturas/838a284c-5786-46f6-97a3-fcb59ee32d4f/original_300.jpg"
+        },
+        "original_key": {
+            "S": "originales/838a284c-5786-46f6-97a3-fcb59ee32d4f/original.jpg"
+        },
+        "error_detalle": {
+            "S": ""
+        }
+    }
+}
+  [OK]     DynamoDB: estado_procesamiento PROCESADO
+  [OK]     DynamoDB: atributos_json conservado
+  [OK]     DynamoDB: miniatura_key = miniaturas/838a284c-5786-46f6-97a3-fcb59ee32d4f/original_300.jpg
+   [S3] head-object s3://lomax-imagenes-originales/originales/838a284c-5786-46f6-97a3-fcb59ee32d4f/original.jpg  =>  existe
+  [OK]     S3: existe el original originales/838a284c-5786-46f6-97a3-fcb59ee32d4f/original.jpg
+   [S3] head-object s3://lomax-imagenes-miniaturas/miniaturas/838a284c-5786-46f6-97a3-fcb59ee32d4f/original_300.jpg  =>  existe
+  [OK]     S3: existe la miniatura referenciada en DynamoDB
+
+=== F2. GET /productos/{id}/imagen vs objeto descargado de S3 ===
+>> GET /productos/838a284c-5786-46f6-97a3-fcb59ee32d4f/imagen -> HTTP 200 (image/jpeg)
+   (binario: 1617 bytes)
+  [OK]     HTTP 200
+  [OK]     Content-Type image/jpeg
+{
+    "AcceptRanges": "bytes",
+    "LastModified": "2026-09-29T21:11:25+00:00",
+    "ContentLength": 1617,
+    "ETag": "\"0aad9a1063572729c66bc8501c039f87\"",
+    "ChecksumCRC32": "4WC9HA==",
+    "ChecksumType": "FULL_OBJECT",
+    "ContentType": "image/jpeg",
+    "Metadata": {},
+    "StorageClass": "STANDARD"
+}
+   SHA256 API: 1E9BAAA06C3D6C64504205E4E8C39358BF7386F1EA9DD08EAF297C0772EB85EF
+   SHA256 S3 : 1E9BAAA06C3D6C64504205E4E8C39358BF7386F1EA9DD08EAF297C0772EB85EF
+  [OK]     bytes del endpoint == bytes descargados de S3
+   Dimensiones original: (1200, 800) | miniatura: (300, 200)
+  [OK]     original 1200x800
+  [OK]     miniatura 300x200
+
+=== G. GET /productos y GET /productos/{id} (publicado) ===
+>> GET /productos -> HTTP 200 (application/json)
+   [{"producto_id":"105e46b1-8850-486e-a28c-bcd197dd5559","codigo":"E4-20260929165057","nombre":"Producto prueba E4","descripcion":"Creado por probar-api.ps1","precio":25.5,"categoria_id":1,"fecha":"2026-09-29T20:50:58.141085","estado":"PUBLICADO","atributos":{"peso_kg":1.5,"color":"rojo"},"estado_imagen":"PROCESADO","miniatura":{"bucket":"lomax-imagenes-miniaturas","key":"miniaturas/105e46b1-8850-486e-a28c-bcd197dd5559/original_300.jpg","url":"s3://lomax-imagenes-miniaturas/miniaturas/105e46b1-8850-486e-a28c-bcd197dd5559/original_300.jpg"},"imagen_url":"/productos/105e46b1-8850-486e-a28c-bcd197d
+  [OK]     el producto PUBLICADO aparece en el listado
+  [OK]     listado con atributos y referencia de miniatura
+  [OK]     todos los elementos del listado son PUBLICADO
+   [RDS] SELECT count(*) FROM productos WHERE estado='PUBLICADO'  =>  7
+  [OK]     elementos del listado == publicados en RDS (7)
+>> GET /productos/838a284c-5786-46f6-97a3-fcb59ee32d4f -> HTTP 200 (application/json)
+   {"producto_id":"838a284c-5786-46f6-97a3-fcb59ee32d4f","codigo":"E4-20260929171123","nombre":"Producto prueba E4","descripcion":"Creado por probar-api.ps1","precio":25.5,"categoria_id":1,"fecha":"2026-09-29T21:11:23.443771","estado":"PUBLICADO","atributos":{"peso_kg":1.5,"color":"rojo"},"estado_imagen":"PROCESADO","miniatura":{"bucket":"lomax-imagenes-miniaturas","key":"miniaturas/838a284c-5786-46f6-97a3-fcb59ee32d4f/original_300.jpg","url":"s3://lomax-imagenes-miniaturas/miniaturas/838a284c-5786-46f6-97a3-fcb59ee32d4f/original_300.jpg"},"imagen_url":"/productos/838a284c-5786-46f6-97a3-fcb59ee3
+  [OK]     detalle -> 200 y PUBLICADO
+
+=== H. Reprocesar y repetir la carga (sin objetos duplicados) ===
+>> POST /productos/838a284c-5786-46f6-97a3-fcb59ee32d4f/reprocesar -> HTTP 200 (application/json)
+   {"producto_id":"838a284c-5786-46f6-97a3-fcb59ee32d4f","estado":"PUBLICADO","original_key":"originales/838a284c-5786-46f6-97a3-fcb59ee32d4f/original.jpg","miniatura_key":"miniaturas/838a284c-5786-46f6-97a3-fcb59ee32d4f/original_300.jpg","dimensiones":[300,200]}
+  [OK]     reprocesar -> 200 PUBLICADO
+>> POST /productos/838a284c-5786-46f6-97a3-fcb59ee32d4f/imagen -> HTTP 200 (application/json)
+   {"producto_id":"838a284c-5786-46f6-97a3-fcb59ee32d4f","estado":"PUBLICADO","original_key":"originales/838a284c-5786-46f6-97a3-fcb59ee32d4f/original.jpg","miniatura_key":"miniaturas/838a284c-5786-46f6-97a3-fcb59ee32d4f/original_300.jpg","dimensiones":[300,200]}
+  [OK]     repetir la imagen -> 200 PUBLICADO
+   [S3] ls s3://lomax-imagenes-originales/originales/838a284c-5786-46f6-97a3-fcb59ee32d4f/  =>  1 objeto(s)
+        2026-09-29 17:11:28      15629 originales/838a284c-5786-46f6-97a3-fcb59ee32d4f/original.jpg
+  [OK]     S3: 1 solo original para el producto
+   [S3] ls s3://lomax-imagenes-miniaturas/miniaturas/838a284c-5786-46f6-97a3-fcb59ee32d4f/  =>  1 objeto(s)
+        2026-09-29 17:11:28       1617 miniaturas/838a284c-5786-46f6-97a3-fcb59ee32d4f/original_300.jpg
+  [OK]     S3: 1 sola miniatura para el producto
+
+=== I. Fallo en Lambda: 502, PENDIENTE y reintento ===
+>> POST /productos -> HTTP 201 (application/json)
+   {"producto_id":"367d0e22-0b6a-42c5-affa-d93c97e02cf4","estado":"PENDIENTE"}
+  [OK]     segundo producto creado (201)
+>> POST /productos/367d0e22-0b6a-42c5-affa-d93c97e02cf4/imagen -> HTTP 502 (application/json)
+   {"error":{"paso":"lambda","detalle":"Truncated File Read"},"producto_id":"367d0e22-0b6a-42c5-affa-d93c97e02cf4","estado":"PENDIENTE"}
+  [OK]     imagen corrupta -> 502
+  [OK]     la respuesta identifica el paso fallido: lambda
+  [OK]     la respuesta conserva estado PENDIENTE
+   [RDS] SELECT estado FROM productos WHERE producto_id='367d0e22-0b6a-42c5-affa-d93c97e02cf4'  =>  PENDIENTE
+  [OK]     RDS: sigue PENDIENTE
+   [DynamoDB get-item 367d0e22-0b6a-42c5-affa-d93c97e02cf4]
+{
+    "Item": {
+        "producto_id": {
+            "S": "367d0e22-0b6a-42c5-affa-d93c97e02cf4"
+        },
+        "atributos_json": {
+            "S": "{\"nota\": \"corrupto\"}"
+        },
+        "estado_procesamiento": {
+            "S": "ERROR"
+        },
+        "error_detalle": {
+            "S": "Truncated File Read"
+        }
+    }
+}
+  [OK]     DynamoDB: estado_procesamiento ERROR
+   [S3] ls s3://lomax-imagenes-miniaturas/miniaturas/367d0e22-0b6a-42c5-affa-d93c97e02cf4/  =>  0 objeto(s)
+  [OK]     S3: no hay miniatura valida para este producto
+>> GET /productos -> HTTP 200 (application/json)
+   [{"producto_id":"105e46b1-8850-486e-a28c-bcd197dd5559","codigo":"E4-20260929165057","nombre":"Producto prueba E4","descripcion":"Creado por probar-api.ps1","precio":25.5,"categoria_id":1,"fecha":"2026-09-29T20:50:58.141085","estado":"PUBLICADO","atributos":{"peso_kg":1.5,"color":"rojo"},"estado_imagen":"PROCESADO","miniatura":{"bucket":"lomax-imagenes-miniaturas","key":"miniaturas/105e46b1-8850-486e-a28c-bcd197dd5559/original_300.jpg","url":"s3://lomax-imagenes-miniaturas/miniaturas/105e46b1-8850-486e-a28c-bcd197dd5559/original_300.jpg"},"imagen_url":"/productos/105e46b1-8850-486e-a28c-bcd197d
+  [OK]     el producto fallido no se publica (no esta en el listado)
+>> POST /productos/367d0e22-0b6a-42c5-affa-d93c97e02cf4/reprocesar -> HTTP 502 (application/json)
+   {"error":{"paso":"lambda","detalle":"Truncated File Read"},"producto_id":"367d0e22-0b6a-42c5-affa-d93c97e02cf4","estado":"PENDIENTE"}
+  [OK]     reprocesar la imagen corrupta -> 502 (el original existe, no es 409)
+>> POST /productos/367d0e22-0b6a-42c5-affa-d93c97e02cf4/imagen -> HTTP 200 (application/json)
+   {"producto_id":"367d0e22-0b6a-42c5-affa-d93c97e02cf4","estado":"PUBLICADO","original_key":"originales/367d0e22-0b6a-42c5-affa-d93c97e02cf4/original.jpg","miniatura_key":"miniaturas/367d0e22-0b6a-42c5-affa-d93c97e02cf4/original_300.jpg","dimensiones":[300,200]}
+  [OK]     reintento con imagen valida -> 200 PUBLICADO
+   [RDS] SELECT estado FROM productos WHERE producto_id='367d0e22-0b6a-42c5-affa-d93c97e02cf4'  =>  PUBLICADO
+  [OK]     RDS: PUBLICADO tras el reintento
+   [DynamoDB get-item 367d0e22-0b6a-42c5-affa-d93c97e02cf4]
+{
+    "Item": {
+        "producto_id": {
+            "S": "367d0e22-0b6a-42c5-affa-d93c97e02cf4"
+        },
+        "atributos_json": {
+            "S": "{\"nota\": \"corrupto\"}"
+        },
+        "estado_procesamiento": {
+            "S": "PROCESADO"
+        },
+        "error_detalle": {
+            "S": ""
+        },
+        "miniatura_bucket": {
+            "S": "lomax-imagenes-miniaturas"
+        },
+        "miniatura_key": {
+            "S": "miniaturas/367d0e22-0b6a-42c5-affa-d93c97e02cf4/original_300.jpg"
+        },
+        "miniatura_url": {
+            "S": "s3://lomax-imagenes-miniaturas/miniaturas/367d0e22-0b6a-42c5-affa-d93c97e02cf4/original_300.jpg"
+        },
+        "original_key": {
+            "S": "originales/367d0e22-0b6a-42c5-affa-d93c97e02cf4/original.jpg"
+        }
+    }
+}
+  [OK]     DynamoDB: PROCESADO tras el reintento
+   [S3] ls s3://lomax-imagenes-miniaturas/miniaturas/367d0e22-0b6a-42c5-affa-d93c97e02cf4/  =>  1 objeto(s)
+        2026-09-29 17:11:30       1617 miniaturas/367d0e22-0b6a-42c5-affa-d93c97e02cf4/original_300.jpg
+  [OK]     S3: 1 miniatura tras el reintento
+   [S3] ls s3://lomax-imagenes-originales/originales/367d0e22-0b6a-42c5-affa-d93c97e02cf4/  =>  1 objeto(s)
+        2026-09-29 17:11:30      15629 originales/367d0e22-0b6a-42c5-affa-d93c97e02cf4/original.jpg
+  [OK]     S3: 1 solo original (el corrupto fue reemplazado)
+
+=== J. RDS no disponible -> 503 ===
+>> GET /categorias -> HTTP 503 (application/json)
+   {"error":{"paso":"rds","detalle":"No se pudo conectar a RDS: connection to server at \"host.docker.internal\" (192.168.65.254), port 5432 failed: Connection refused\n\tIs the server running on that host and accepting TCP/IP connections?\nconnection to server at \"host.docker.internal\" (fdc4:f303:9324::254), port 5432 failed: Network is unreachable\n\tIs the server running on that host and accepting TCP/IP connections?"}}
+  [OK]     GET /categorias con RDS detenido -> 503
+  [OK]     la respuesta identifica el paso: rds
+>> GET /categorias -> HTTP 200 (application/json)
+   [{"categoria_id":1,"nombre":"Laptops y Computo","descripcion":"Equipos portátiles y de escritorio"},{"categoria_id":2,"nombre":"Monitores y Pantallas","descripcion":"Pantallas de alta definición y gaming"},{"categoria_id":3,"nombre":"Periféricos y Audio","descripcion":"Teclados, auriculares y accesorios"}]
+  [OK]     GET /categorias tras reiniciar RDS -> 200
+
+=== RESUMEN ===
+Verificaciones OK: 66 | FALLO: 0
+Productos de prueba: 838a284c-5786-46f6-97a3-fcb59ee32d4f (codigo E4-20260929171123) y 367d0e22-0b6a-42c5-affa-d93c97e02cf4 (codigo E4B-20260929171123)
+Reporte: evidencia\e4\reporte.txt
