@@ -78,8 +78,9 @@ foreach ($prod in $jsonData.productos) {
     $tmp = Join-Path $env:TEMP "item_$($prod.producto_id).json"
     [System.IO.File]::WriteAllText($tmp, $item, (New-Object System.Text.UTF8Encoding($false)))
 
-    $r = Invoke-Native { aws dynamodb put-item --table-name lomax-productos-attr --item "file://$tmp" }
-    if ($r.Codigo -ne 0) { Write-Host "Error DynamoDB en producto $($prod.producto_id): $($r.Salida)" -ForegroundColor Red }
+    # attribute_not_exists: una repeticion de la carga NO pisa items ya procesados (estado, miniatura)
+    $r = Invoke-Native { aws dynamodb put-item --table-name lomax-productos-attr --item "file://$tmp" --condition-expression "attribute_not_exists(producto_id)" }
+    if ($r.Codigo -ne 0 -and $r.Salida -notmatch "ConditionalCheckFailed") { Write-Host "Error DynamoDB en producto $($prod.producto_id): $($r.Salida)" -ForegroundColor Red }
 
     Remove-Item $tmp -ErrorAction SilentlyContinue
 }

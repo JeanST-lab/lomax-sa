@@ -1,0 +1,20 @@
+﻿a1b2c3d4-e5f6-7890-abcd-ef1234567801|LAP-ASUS-001|ASUS ROG Strix G16|Laptop gamer de alto rendimiento|1499.99|1|2026-09-29 17:59:51.199422|PUBLICADO
+a1b2c3d4-e5f6-7890-abcd-ef1234567802|LAP-LEN-002|Lenovo IdeaPad 3|Laptop para oficina y estudio|550.00|1|2026-09-29 17:59:51.830826|PUBLICADO
+a1b2c3d4-e5f6-7890-abcd-ef1234567803|LAP-HP-003|HP Pavilion 15|Laptop multimedia con diseño elegante|720.50|1|2026-09-29 17:59:52.415448|PUBLICADO
+a1b2c3d4-e5f6-7890-abcd-ef1234567804|LAP-MAC-004|MacBook Air M2|Portátil ultraligera con chip M2|1199.00|1|2026-09-29 17:59:52.992767|PUBLICADO
+a1b2c3d4-e5f6-7890-abcd-ef1234567805|LAP-ACER-005|Acer Nitro 5|Laptop gamer económica|850.00|1|2026-09-29 17:59:53.598963|PUBLICADO
+a1b2c3d4-e5f6-7890-abcd-ef1234567806|MON-SAM-006|Monitor Samsung Odyssey G3|Monitor curvo gaming 144Hz|280.00|2|2026-09-29 17:59:54.207675|PUBLICADO
+a1b2c3d4-e5f6-7890-abcd-ef1234567807|MON-LG-007|Monitor LG UltraWide 29|Monitor panorámico para productividad|299.99|2|2026-09-29 17:59:54.903497|PUBLICADO
+a1b2c3d4-e5f6-7890-abcd-ef1234567808|MON-ASUS-008|Monitor ASUS TUF Gaming|Monitor IPS 165Hz con sincronización adaptativa|320.00|2|2026-09-29 17:59:55.598813|PUBLICADO
+a1b2c3d4-e5f6-7890-abcd-ef1234567809|MON-XIA-009|Xiaomi Curved Gaming Monitor|Monitor ultra ancho para juegos inmersivos|390.00|2|2026-09-29 17:59:56.286422|PUBLICADO
+a1b2c3d4-e5f6-7890-abcd-ef1234567810|MON-DEL-010|Monitor Dell 24 Oficina|Monitor FHD con tecnología comfortview|160.00|2|2026-09-29 17:59:56.923061|PUBLICADO
+a1b2c3d4-e5f6-7890-abcd-ef1234567811|PER-LOG-011|Teclado Mecánico Logitech G Pro|Teclado compacto RGB para esports|129.99|3|2026-09-29 17:59:57.527269|PUBLICADO
+a1b2c3d4-e5f6-7890-abcd-ef1234567812|PER-RAZ-012|Mouse Razer DeathAdder V3|Mouse ergonómico ultraligero|69.99|3|2026-09-29 17:59:58.173634|PUBLICADO
+a1b2c3d4-e5f6-7890-abcd-ef1234567813|PER-COR-013|Audífonos Corsair Void RGB Elite|Auriculares inalámbricos con sonido 7.1|99.99|3|2026-09-29 17:59:58.759909|PUBLICADO
+a1b2c3d4-e5f6-7890-abcd-ef1234567814|PER-HYP-014|Micrófono HyperX QuadCast S|Micrófono condensador USB con iluminación RGB|159.99|3|2026-09-29 17:59:59.388158|PUBLICADO
+a1b2c3d4-e5f6-7890-abcd-ef1234567815|PER-SAM-015|Galaxy Buds FE|Auriculares in-ear con cancelación de ruido|89.00|3|2026-09-29 18:00:00.025308|PUBLICADO
+a1b2c3d4-e5f6-7890-abcd-ef1234567816|PER-RED-016|Teclado Redragon Kumara|Teclado mecánico TKL switchout|45.00|3|2026-09-29 18:00:00.666723|PUBLICADO
+a1b2c3d4-e5f6-7890-abcd-ef1234567817|PER-LOG-017|Mousepad Logitech G640|Alfombrilla de tela grande para baja sensibilidad|39.99|3|2026-09-29 18:00:01.255712|PUBLICADO
+a1b2c3d4-e5f6-7890-abcd-ef1234567818|PER-SON-018|Sony DualSense Controller|Control inalambrico PS5 Edición Especial|74.99|3|2026-09-29 18:00:01.887421|PUBLICADO
+a1b2c3d4-e5f6-7890-abcd-ef1234567819|PER-ELG-019|Elgato Stream Deck MK.2|Panel de control con 15 teclas LCD personalizables|149.99|3|2026-09-29 18:00:02.539217|PUBLICADO
+a1b2c3d4-e5f6-7890-abcd-ef1234567820|PER-LOG-020|Webcam Logitech C920s Pro|Cámara web Full HD 1080p con cubierta de privacidad|69.99|3|2026-09-29 18:00:03.146255|PUBLICADO

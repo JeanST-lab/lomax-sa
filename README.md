@@ -7,6 +7,32 @@ cuando su información está completa. Todo el entorno AWS corre en local con **
 
 **Alcance:** registrar productos, mostrar el catálogo y consultar el detalle de un producto.
 
+## 👥 Organización y Trabajo Colaborativo (P9 / P10)
+
+Conforme a los criterios de evaluación, el desarrollo del proyecto ha sido distribuido y verificado de manera colaborativa:
+
+* **Jean Stalin Huamani Huayhua** – `@JeanST-lab`  
+  * *Roles:* Arquitectura de la solución (E1), coordinación general y despliegue/verificación en EKS (E7).
+* **Alexander Choquehuanca Perez** – `@Alexander20300`  
+  * *Roles:* Modelado de bases de datos relacionales y NoSQL (E2), integración de almacenamiento S3 y automatización con AWS Lambda (E3).
+* **Jose Manuel Catari Apaza** – `@DevUnitari`  
+  * *Roles:* Desarrollo del Backend con FastAPI, manejo de códigos de estado, validaciones (E4) y diseño del Frontend con el Dashboard del catálogo (E5).
+
+---
+
+## 📂 Estructura de Evidencias por Etapas (E1 - E7)
+
+El repositorio se encuentra estructurado de la siguiente manera:
+- **`evidencia/e1/`**: Diagramas de arquitectura y documentación de componentes de red.
+- **`evidencia/e2/`**: Esquemas de persistencia en PostgreSQL (RDS) y tablas (DynamoDB), respaldos (`rds_antes.txt`, `ddb_antes.json`).
+- **`evidencia/e3/`**: Configuración de buckets S3 y código fuente de la función Lambda para procesamiento de miniaturas.
+- **`evidencia/e4/`**: Endpoints del Backend desarrollados en FastAPI, pruebas y manejo de excepciones.
+- **`evidencia/e5/`**: Código del Frontend, Reverse Proxy Nginx y assets visuales del panel.
+- **`evidencia/e6/`**: Registros de compilación de imágenes y comandos de subida a ECR.
+- **`evidencia/e7/`**: Manifiestos de Kubernetes, configuraciones de clúster con Floci y scripts de escalado.
+
+---
+
 ## Arquitectura
 
 ```mermaid

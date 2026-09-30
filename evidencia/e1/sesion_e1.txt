@@ -1,0 +1,36 @@
+﻿**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20260929195236
+Nombre de usuario: JEANST23IC\jean2
+Usuario RunAs: JEANST23IC\jean2
+Nombre de la configuración: 
+Máquina: JEANST23IC (Microsoft Windows NT 10.0.26200.0)
+Aplicación host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Id. de proceso: 32668
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+La transcripción ha comenzado. El archivo de salida es evidencia\e1\sesion_e1.txt
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> docker --version
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> kubectl version --client
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> aws --version
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> floci doctor
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> aws s3 ls
+
+PS C:\Users\jean2\OneDrive\Desktop\Lomax SA> Stop-Transcript
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20260929195242
+**********************

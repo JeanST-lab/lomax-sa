@@ -5,3 +5,9 @@ __pycache__/
 .env
 
 kubeconfig-lomax.yaml
+
+floci-data/
+rebuild.zip
+
+floci-data/
+rebuild.zip

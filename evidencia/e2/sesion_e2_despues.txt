@@ -1,0 +1,37 @@
+﻿**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20260929201653
+Nombre de usuario: JEANST23IC\jean2
+Usuario RunAs: JEANST23IC\jean2
+Nombre de la configuración: 
+Máquina: JEANST23IC (Microsoft Windows NT 10.0.26200.0)
+Aplicación host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -File .\scripts\e2_persistencia.ps1 -Fase despues
+Id. de proceso: 24796
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Esperando a que RDS y Floci respondan...
+fase=despues
+productos_en_rds=20
+items_en_dynamodb=20
+rds_iniciado=2026-09-30T00:16:45.654786275Z
+floci_iniciado=2026-09-30T00:16:47.554041558Z
+
+=== Comparacion antes / despues ===
+IGUAL: rds (20 lineas identicas)
+IGUAL: ddb (522 lineas identicas)
+
+=== Otros servicios de Floci tras el reinicio ===
+
+
+
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20260929201656
+**********************

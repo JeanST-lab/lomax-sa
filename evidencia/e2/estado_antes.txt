@@ -1,0 +1,7 @@
+﻿fase=antes
+productos_en_rds=20
+items_en_dynamodb=20
+rds_iniciado=2026-09-30T00:14:50.434252234Z
+floci_iniciado=2026-09-30T00:14:53.291392561Z
+rds_volumenes=[{"Type":"volume","Name":"d818ecaab4ab6d43c99587d72f4de6e4bd45bcbd26e2fae1e4bba824183a25b5","Source":"/var/lib/docker/volumes/d818ecaab4ab6d43c99587d72f4de6e4bd45bcbd26e2fae1e4bba824183a25b5/_data","Destination":"/var/lib/postgresql/data","Driver":"local","Mode":"","RW":true,"Propagation":""}]
+floci_volumenes=[{"Type":"bind","Source":"/var/run/docker.sock","Destination":"/var/run/docker.sock","Mode":"","RW":true,"Propagation":"rprivate"},{"Type":"bind","Source":"C:\\Users\\jean2\\OneDrive\\Desktop\\Lomax SA\\floci-data","Destination":"/app/data","Mode":"","RW":true,"Propagation":"rprivate"}]
